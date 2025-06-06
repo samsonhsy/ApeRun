@@ -1116,6 +1116,17 @@ button {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
+/* Facility Store Content Container */
+.facility-store-content {
+    background: white;
+    width: 85%;
+    max-width: 380px;
+    max-height: 85vh;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
 /* Popup Header */
 .popup-header {
     background: linear-gradient(135deg, #4CAF50, #45a049);
@@ -1387,6 +1398,145 @@ button {
 
     .stat-item {
         font-size: 11px;
+    }
+}
+
+/* Facility List */
+.facility-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Facility Items */
+.facility-item {
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 15px;
+    transition: all 0.3s ease;
+    background: #fafafa;
+}
+
+.facility-item:hover {
+    border-color: #4CAF50;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Facility Type Border Colors */
+.aqua-facility {
+    border-left: 4px solid #00BCD4;
+}
+
+.biofuel-facility {
+    border-left: 4px solid #8BC34A;
+}
+
+.kinetic-facility {
+    border-left: 4px solid #FF9800;
+}
+
+/* Facility Header */
+.facility-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.facility-header h4 {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+    font-weight: 600;
+}
+
+.facility-price {
+    background: #f0f0f0;
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #666;
+    border: 1px solid #ddd;
+}
+
+/* Facility Details */
+.facility-details {
+    margin-bottom: 15px;
+}
+
+.facility-description {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.4;
+    margin-bottom: 10px;
+}
+
+.facility-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* Facility Buy Button */
+.facility-buy-btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.facility-buy-btn.locked {
+    background: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.facility-buy-btn.locked:hover {
+    background: #bbb;
+}
+
+/* Facilities Header */
+.facilities-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.facilities-header h3 {
+    margin: 0;
+}
+
+/* Full Storage Indicator */
+.full-indicator {
+    background: #F44336;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: bold;
+    margin-left: 8px;
+    display: inline-block;
+    animation: pulse 1.5s infinite;
+    box-shadow: 0 2px 4px rgba(244, 67, 54, 0.3);
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.7;
+        transform: scale(1.05);
     }
 }
 

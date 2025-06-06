@@ -15,14 +15,14 @@ let availableFacilities = {
     level: 1,
     rate: 2,
     accumulated: 0,
-    maxStorage: 24,
+    maxStorage: 10,
     lastUpdate: Date.now(),
   },
   wind: {
     level: 1,
     rate: 2,
     accumulated: 0,
-    maxStorage: 24,
+    maxStorage: 10,
     lastUpdate: Date.now(),
   },
 };
@@ -162,7 +162,7 @@ function setupHomeViewEvents() {
         availableFacilities.solar.level++;
         availableFacilities.solar.rate = availableFacilities.solar.level * 2;
         availableFacilities.solar.maxStorage =
-          availableFacilities.solar.level * 24;
+          availableFacilities.solar.level * 10;
         ecoScore += 5;
         updateAllDisplays();
         showNotification("太陽能板已升級！", "success");
@@ -195,7 +195,7 @@ function setupHomeViewEvents() {
         availableFacilities.wind.level++;
         availableFacilities.wind.rate = availableFacilities.wind.level * 2;
         availableFacilities.wind.maxStorage =
-          availableFacilities.wind.level * 24;
+          availableFacilities.wind.level * 10;
         ecoScore += 5;
         updateAllDisplays();
         showNotification("風力發電機已升級！", "success");
@@ -231,6 +231,9 @@ function setupHomeViewEvents() {
 
   // Energy Device Store functionality
   setupEnergyDeviceStore();
+
+  // Facility Store functionality
+  setupFacilityStore();
 }
 
 // Energy Device Store Functionality
@@ -238,7 +241,7 @@ function setupEnergyDeviceStore() {
   const openBtn = document.getElementById("open-device-store-btn");
   const closeBtn = document.getElementById("close-device-store-btn");
   const popup = document.getElementById("energy-device-store-popup");
-  
+
   // Check if elements exist
   if (!openBtn || !closeBtn || !popup) {
     console.error("Energy device store elements not found");
@@ -265,20 +268,20 @@ function setupEnergyDeviceStore() {
 
   // Device purchase attempt handling
   const deviceButtons = document.querySelectorAll(".device-buy-btn.locked");
-  
+
   deviceButtons.forEach((button) => {
     button.addEventListener("click", function () {
       const deviceType = this.dataset.device;
       const deviceNames = {
         "power-insole": "發電鞋墊",
-        "kinetic-wristband": "動能手環", 
+        "kinetic-wristband": "動能手環",
         "solar-watch": "太陽能手錶",
         "wind-backpack": "風力背包",
-        "aqua-wristband": "水力腕帶"
+        "aqua-wristband": "水力腕帶",
       };
-      
+
       const deviceName = deviceNames[deviceType] || "未知裝置";
-      
+
       showNotification(
         `⚠️ ${deviceName} 在原型版本中暫不開放購買！\n\n完整版本功能預覽：\n• 消耗對應能源元素購買裝置\n• 自動收集日常活動產生的能源\n• 裝置升級系統\n• 佩戴效果視覺化`,
         "info"
@@ -291,6 +294,48 @@ function setupEnergyDeviceStore() {
     if (event.key === "Escape" && popup.style.display === "flex") {
       popup.style.display = "none";
     }
+  });
+}
+
+// Facility Store Functionality
+function setupFacilityStore() {
+  const openBtn = document.getElementById("open-facility-store-btn");
+  const closeBtn = document.getElementById("close-facility-store-btn");
+  const popup = document.getElementById("facility-store-popup");
+
+  // Check if elements exist
+  if (!openBtn || !closeBtn || !popup) {
+    console.error("Facility store elements not found");
+    return;
+  }
+
+  // Open popup
+  openBtn.addEventListener("click", function () {
+    popup.style.display = "flex";
+    console.log("設施商店已開啟");
+  });
+
+  // Close popup
+  closeBtn.addEventListener("click", function () {
+    popup.style.display = "none";
+    console.log("設施商店已關閉");
+  });
+
+  // Close popup when clicking overlay
+  popup.addEventListener("click", function (e) {
+    if (e.target === popup) {
+      popup.style.display = "none";
+    }
+  });
+
+  // Setup facility purchase buttons (locked state)
+  document.querySelectorAll(".facility-buy-btn.locked").forEach((button) => {
+    button.addEventListener("click", function () {
+      showNotification(
+        "⚠️ 此功能在原型版本中暫不開放！\n完整版本將支援購買新設施。",
+        "info"
+      );
+    });
   });
 }
 
@@ -491,8 +536,8 @@ function setupEnergyAccumulation() {
 
   // Add some initial accumulated energy for immediate testing
   setTimeout(() => {
-    availableFacilities.solar.accumulated = 3;
-    availableFacilities.wind.accumulated = 2;
+    availableFacilities.solar.accumulated = 4;
+    availableFacilities.wind.accumulated = 4;
     updateAllDisplays();
     showNotification("設施已開始產生能源！檢查收集按鈕", "info");
   }, 2000);
@@ -581,9 +626,16 @@ function updateHomeDisplay() {
     { id: "solar-level-display", value: availableFacilities.solar.level },
     { id: "solar-rate-display", value: availableFacilities.solar.rate },
     { id: "solar-accumulated", value: availableFacilities.solar.accumulated },
+    { id: "solar-max-storage", value: availableFacilities.solar.maxStorage },
+    {
+      id: "solar-accumulated-btn",
+      value: availableFacilities.solar.accumulated,
+    },
     { id: "wind-level-display", value: availableFacilities.wind.level },
     { id: "wind-rate-display", value: availableFacilities.wind.rate },
     { id: "wind-accumulated", value: availableFacilities.wind.accumulated },
+    { id: "wind-max-storage", value: availableFacilities.wind.maxStorage },
+    { id: "wind-accumulated-btn", value: availableFacilities.wind.accumulated },
   ];
 
   facilityElements.forEach((element) => {
@@ -594,6 +646,32 @@ function updateHomeDisplay() {
       console.warn(`Facility element not found: ${element.id}`);
     }
   });
+
+  // Update full storage indicators
+  const solarFullIndicator = document.getElementById("solar-full-indicator");
+  const windFullIndicator = document.getElementById("wind-full-indicator");
+
+  if (solarFullIndicator) {
+    if (
+      availableFacilities.solar.accumulated >=
+      availableFacilities.solar.maxStorage
+    ) {
+      solarFullIndicator.style.display = "inline-block";
+    } else {
+      solarFullIndicator.style.display = "none";
+    }
+  }
+
+  if (windFullIndicator) {
+    if (
+      availableFacilities.wind.accumulated >=
+      availableFacilities.wind.maxStorage
+    ) {
+      windFullIndicator.style.display = "inline-block";
+    } else {
+      windFullIndicator.style.display = "none";
+    }
+  }
 
   // Update button states with null checks
   const solarUpgradeBtn = document.getElementById("upgrade-solar-btn");
@@ -726,47 +804,45 @@ function simulateEnergyGeneration() {
     showNotification("能源產生系統已啟動 ⚡", "success");
   }, 1000);
 
-  // Add energy every 30 seconds for better demonstration
+  // Generate 2 energy every 30 seconds for better demonstration
   setInterval(() => {
     let energyAdded = false;
     let notifications = [];
 
-    // 70% chance to generate solar energy
-    if (Math.random() > 0.3) {
-      const generated = Math.min(
-        1,
-        availableFacilities.solar.maxStorage -
-          availableFacilities.solar.accumulated
-      );
-      if (generated > 0) {
-        availableFacilities.solar.accumulated += generated;
-        energyAdded = true;
-        notifications.push(`☀️ +${generated} 太陽能`);
-      }
+    // Always generate 2 solar energy (if space available)
+    const solarGenerated = Math.min(
+      2,
+      availableFacilities.solar.maxStorage -
+        availableFacilities.solar.accumulated
+    );
+    if (solarGenerated > 0) {
+      availableFacilities.solar.accumulated += solarGenerated;
+      energyAdded = true;
+      notifications.push(`☀️ +${solarGenerated} 太陽能`);
     }
 
-    // 70% chance to generate wind energy
-    if (Math.random() > 0.3) {
-      const generated = Math.min(
-        1,
-        availableFacilities.wind.maxStorage -
-          availableFacilities.wind.accumulated
-      );
-      if (generated > 0) {
-        availableFacilities.wind.accumulated += generated;
-        energyAdded = true;
-        notifications.push(`🌬️ +${generated} 風力能源`);
-      }
+    // Always generate 2 wind energy (if space available)
+    const windGenerated = Math.min(
+      2,
+      availableFacilities.wind.maxStorage - availableFacilities.wind.accumulated
+    );
+    if (windGenerated > 0) {
+      availableFacilities.wind.accumulated += windGenerated;
+      energyAdded = true;
+      notifications.push(`🌬️ +${windGenerated} 風力能源`);
     }
 
     // Update display and show notification if any energy was added
     if (energyAdded) {
       updateAllDisplays();
-      showNotification(notifications.join(" | ") + " 已產生", "success");
+      // showNotification(notifications.join(" | ") + " 已產生", "success");
       console.log("能源產生中...", {
         solar: availableFacilities.solar.accumulated,
         wind: availableFacilities.wind.accumulated,
       });
+    } else {
+      // Show storage full notification if no energy was added
+      console.log("儲存已滿，請收集能源後繼續產生");
     }
   }, 30000); // Every 30 seconds
 }

@@ -73,17 +73,41 @@
 
         <!-- 可用設施區域 (預設解鎖) -->
         <div class="available-facilities">
-          <h3>🔧 可用設施</h3>
+          <div class="facilities-header">
+            <h3>🔧 可用設施</h3>
+            <!-- 設施商店按鈕 -->
+            <button
+              id="open-facility-store-btn"
+              class="store-btn-compact btn-animation"
+              title="設施商店"
+            >
+              🏪
+            </button>
+          </div>
 
           <!-- 太陽能板設施 -->
           <div class="home-facility available">
             <h3>☀️ 太陽能板 (等級 <span id="solar-level-display">1</span>)</h3>
             <p>目前產能: <span id="solar-rate-display">2</span> Solara/小時</p>
+            <p>
+              儲存容量: <span id="solar-accumulated">0</span>/<span
+                id="solar-max-storage"
+                >10</span
+              >
+              <span
+                id="solar-full-indicator"
+                class="full-indicator"
+                style="display: none"
+                >FULL</span
+              >
+            </p>
             <button id="upgrade-solar-btn" class="upgrade-btn btn-animation">
               升級太陽能板 (消耗 10 Solara☀️)
             </button>
             <button id="collect-solar-btn" class="collect-btn btn-animation">
-              收集能源 (<span class="white-text" id="solar-accumulated">0</span>
+              收集能源 (<span class="white-text" id="solar-accumulated-btn"
+                >0</span
+              >
               可收集)
             </button>
           </div>
@@ -92,55 +116,29 @@
           <div class="home-facility available">
             <h3>🌬️ 風力發電機 (等級 <span id="wind-level-display">1</span>)</h3>
             <p>目前產能: <span id="wind-rate-display">2</span> Wind/小時</p>
+            <p>
+              儲存容量: <span id="wind-accumulated">0</span>/<span
+                id="wind-max-storage"
+                >10</span
+              >
+              <span
+                id="wind-full-indicator"
+                class="full-indicator"
+                style="display: none"
+                >FULL</span
+              >
+            </p>
             <button id="upgrade-wind-btn" class="upgrade-btn btn-animation">
               升級風力發電機 (消耗 10 Wind🌬️)
             </button>
             <button id="collect-wind-btn" class="collect-btn btn-animation">
-              收集能源 (<span class="white-text" id="wind-accumulated">0</span>
+              收集能源 (<span class="white-text" id="wind-accumulated-btn"
+                >0</span
+              >
               可收集)
             </button>
           </div>
         </div>
-
-        <!-- 設施商店區域 (鎖定狀態) -->
-        <div class="facility-store">
-          <h3>🏪 設施商店 (概念展示)</h3>
-
-          <!-- 水力發電機設施 (鎖定) -->
-          <div class="home-facility locked">
-            <h3>💧 水力發電機 (等級 1)</h3>
-            <p>產能: 2 Aqua/小時</p>
-            <button id="buy-aqua-btn" class="buy-btn locked" disabled>
-              購買 (需要 500 Solara☀️)
-            </button>
-            <p class="lock-notice">⚠️ 原型版本中暫不開放購買</p>
-          </div>
-
-          <!-- 廚餘轉化器設施 (鎖定) -->
-          <div class="home-facility locked">
-            <h3>♻️ 廚餘轉化器 (等級 1)</h3>
-            <p>產能: 2 Bio-Fuel/小時</p>
-            <button id="buy-compost-btn" class="buy-btn locked" disabled>
-              購買 (需要 400 Wind🌬️)
-            </button>
-            <p class="lock-notice">⚠️ 原型版本中暫不開放購買</p>
-          </div>
-
-          <!-- 動能發電機設施 (鎖定) -->
-          <div class="home-facility locked">
-            <h3>⚡ 動能發電機 (等級 1)</h3>
-            <p>產能: 2 Kinetic/小時</p>
-            <button id="buy-kinetic-btn" class="buy-btn locked" disabled>
-              購買 (需要 600 混合能源)
-            </button>
-            <p class="lock-notice">⚠️ 原型版本中暫不開放購買</p>
-          </div>
-        </div>
-
-        <p class="info-text">
-          💡
-          提示：設施會定時產生能源，記得定期收集！升級設施可提高產能和存儲上限。
-        </p>
       </div>
 
       <!-- Explore View -->
@@ -293,6 +291,121 @@
           <span class="white-text">資訊</span>
         </button>
       </nav>
+    </div>
+
+    <!-- 設施商店彈窗 -->
+    <div id="facility-store-popup" class="popup-overlay" style="display: none">
+      <div class="popup-content facility-store-content">
+        <div class="popup-header">
+          <h3>🏪 設施商店</h3>
+          <button id="close-facility-store-btn" class="close-popup-btn">
+            ✕
+          </button>
+        </div>
+
+        <div class="popup-body">
+          <p class="store-description">
+            購買更多綠色能源設施來擴展您的家園！每種設施都有獨特的能源產出。
+          </p>
+
+          <!-- 設施商品列表 -->
+          <div class="facility-list">
+            <!-- 水力發電機設施 (鎖定) -->
+            <div class="facility-item aqua-facility">
+              <div class="facility-header">
+                <h4>💧 水力發電機 (等級 1)</h4>
+                <span class="facility-price">500 Solara☀️</span>
+              </div>
+              <div class="facility-details">
+                <p class="facility-description">
+                  高效水力發電系統，利用水流動能產生清潔電力。
+                  適合安裝在有水源的環境中，能夠24小時持續發電。
+                </p>
+                <div class="facility-stats">
+                  <span class="stat-item">📊 產能：2 Aqua💧/小時</span>
+                  <span class="stat-item">🔋 能源類型：水力 Aqua💧</span>
+                  <span class="stat-item">⏱️ 運作方式：持續產能</span>
+                  <span class="stat-item">💪 特色：24小時穩定發電</span>
+                </div>
+              </div>
+              <button
+                id="buy-aqua-btn"
+                class="facility-buy-btn locked"
+                disabled
+              >
+                購買 (原型版本暫不開放)
+              </button>
+            </div>
+
+            <!-- 廚餘轉化器設施 (鎖定) -->
+            <div class="facility-item biofuel-facility">
+              <div class="facility-header">
+                <h4>♻️ 廚餘轉化器 (等級 1)</h4>
+                <span class="facility-price">400 Wind🌬️</span>
+              </div>
+              <div class="facility-details">
+                <p class="facility-description">
+                  智能廚餘處理系統，將有機廢料轉化為生物燃料。
+                  環保循環利用，減少廢物同時產生清潔能源。
+                </p>
+                <div class="facility-stats">
+                  <span class="stat-item">📊 產能：2 Bio-Fuel♻️/小時</span>
+                  <span class="stat-item"
+                    >🔋 能源類型：生物燃料 Bio-Fuel♻️</span
+                  >
+                  <span class="stat-item">⏱️ 運作方式：廢料轉化</span>
+                  <span class="stat-item">💪 特色：環保循環利用</span>
+                </div>
+              </div>
+              <button
+                id="buy-compost-btn"
+                class="facility-buy-btn locked"
+                disabled
+              >
+                購買 (原型版本暫不開放)
+              </button>
+            </div>
+
+            <!-- 動能發電機設施 (鎖定) -->
+            <div class="facility-item kinetic-facility">
+              <div class="facility-header">
+                <h4>⚡ 動能發電機 (等級 1)</h4>
+                <span class="facility-price">600 混合能源</span>
+              </div>
+              <div class="facility-details">
+                <p class="facility-description">
+                  先進動能收集系統，將各種機械運動轉化為電能。
+                  高科技設備，需要混合能源才能解鎖。
+                </p>
+                <div class="facility-stats">
+                  <span class="stat-item">📊 產能：2 Kinetic⚡/小時</span>
+                  <span class="stat-item">🔋 能源類型：動能 Kinetic⚡</span>
+                  <span class="stat-item">⏱️ 運作方式：運動轉化</span>
+                  <span class="stat-item">💪 特色：高科技能源轉換</span>
+                </div>
+              </div>
+              <button
+                id="buy-kinetic-btn"
+                class="facility-buy-btn locked"
+                disabled
+              >
+                購買 (原型版本暫不開放)
+              </button>
+            </div>
+          </div>
+
+          <!-- 原型版本說明 -->
+          <div class="prototype-notice">
+            <h4>⚠️ 原型版本限制說明</h4>
+            <ul>
+              <li>目前版本僅供展示，無法實際購買設施</li>
+              <li>完整版本將支援設施購買和建造系統</li>
+              <li>設施效果將與實際能源產出整合</li>
+              <li>未來將加入設施升級和自定義功能</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- 能源收集裝置商店彈窗 -->
