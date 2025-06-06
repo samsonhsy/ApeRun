@@ -16,14 +16,14 @@ A responsive web-based prototype that simulates a mobile app interface for green
 
 - **Multi-Element Energy System**: 5 types of energy elements (Solara☀️, Wind🌬️, Aqua💧, Bio-Fuel♻️, Kinetic⚡)
 - **Facility Management**: Upgrade and manage renewable energy facilities
-- **AR Hotspot Simulation**: Explore Hong Kong's green energy locations (Zero Carbon Building)
+- **AR+GPS Hotspot Simulation**: Explore Hong Kong's green energy locations using augmented reality and GPS positioning (Zero Carbon Building)
 - **Real-time Energy Generation**: Facilities generate energy over time with collection mechanics
 - **Interactive UI**: Smooth animations, hover effects, and responsive buttons
 
 ### Three Main Views
 
 1. **🏠 Home View (家園)**: Manage eco-home with 2.5D visualization and energy facilities
-2. **🗺️ Explore View (探索)**: Discover green energy hotspots via AR simulation with interactive map
+2. **🗺️ Explore View (探索)**: Discover green energy hotspots via AR+GPS simulation with interactive map
 3. **💡 Info View (資訊)**: Learn about the app concept, team information, and competition details
 
 ## 🚀 Quick Start
@@ -106,7 +106,7 @@ If you want to run the project locally for development purposes:
 
 - **Interactive Hong Kong Map**: Explore the Zero Carbon Building hotspot
 - **Character Movement**: Watch the ape avatar move around the map
-- **AR Simulation**: Click on solar hotspot to experience popup with location information
+- **AR+GPS Simulation**: Click on solar hotspot to experience popup with location information using simulated augmented reality and GPS positioning
 - **Collect Rewards**: Gather Solara☀️ energy elements from exploration
 - **Educational Content**: Learn about real Hong Kong green energy initiatives
 
@@ -242,7 +242,7 @@ This prototype demonstrates:
 - **Green Energy Awareness**: Introduction to 5 types of renewable energy (solar, wind, hydro, biomass, kinetic)
 - **Gamification**: Making sustainability engaging through interactive facility management
 - **Hong Kong Context**: Showcasing local green energy initiatives like Zero Carbon Building
-- **Technology Integration**: Simulating AR experiences and mobile app functionality
+- **Technology Integration**: Simulating AR+GPS experiences and mobile app functionality
 - **Behavioral Change**: Encouraging real-world adoption of green energy practices
 
 ### Competition Entry
@@ -256,14 +256,14 @@ This prototype demonstrates:
 ## 🚧 Prototype Limitations
 
 - **No Backend**: All data stored in browser session only
-- **Simulated AR**: No real camera or AR functionality
+- **Simulated AR+GPS**: No real camera, AR functionality, or GPS positioning
 - **Limited Content**: Single hotspot for demonstration
 - **No User Accounts**: No registration or login system
 - **Session Only**: Data resets on page refresh
 
 ## 🔮 Future Enhancements
 
-- **Real AR Integration**: Camera-based AR experiences
+- **Real AR+GPS Integration**: Camera-based AR experiences with actual GPS positioning
 - **Backend System**: User accounts and data persistence
 - **More Hotspots**: Expanded Hong Kong green energy locations
 - **Social Features**: Share progress with friends
