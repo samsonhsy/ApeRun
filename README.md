@@ -28,50 +28,60 @@ A responsive web-based prototype that simulates a mobile app interface for green
 
 ## 🚀 Quick Start
 
-### Prerequisites
+### 🌐 Live Demo
 
-- Modern web browser (Chrome, Firefox, Safari, Edge)
-- Local web server (Python, Node.js, or any HTTP server)
+**The app is live and ready to use! No installation required.**
 
-### Installation
+**🔗 Visit: [https://samsonhsy.github.io/ApeRun/](https://samsonhsy.github.io/ApeRun/)**
 
-1. **Clone or download the project**
-
-   ```bash
-   git clone <repository-url>
-   cd ApeRun-Prototype
-   ```
-
-2. **Start a local web server**
-
-   **Option 1: Python (Recommended)**
-
-```bash
-python -m http.server 8000
-```
-
-**Option 2: Node.js**
-
-```bash
-npx http-server -p 8000
-```
-
-**Option 3: PHP**
-
-```bash
-php -S localhost:8000
-```
-
-3. **Open in browser**
-   ```
-   http://localhost:8000
-   ```
+Simply click the link above to start exploring the green energy education app instantly in your browser!
 
 ### 📱 Viewing on Different Devices
 
 - **Desktop**: App appears as a centered mobile container
 - **Mobile**: App fills the entire screen with responsive adjustments
 - **Tablet**: Centered container with enhanced spacing
+
+### Prerequisites
+
+- Modern web browser (Chrome, Firefox, Safari, Edge)
+- Internet connection to access the hosted website
+
+### 💻 For Developers (Local Development)
+
+If you want to run the project locally for development purposes:
+
+1. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/samsonhsy/ApeRun.git
+   cd ApeRun
+   ```
+
+2. **Start a local web server**
+
+   **Option 1: Python (Recommended)**
+
+   ```bash
+   python -m http.server 8000
+   ```
+
+   **Option 2: Node.js**
+
+   ```bash
+   npx http-server -p 8000
+   ```
+
+   **Option 3: PHP**
+
+   ```bash
+   php -S localhost:8000
+   ```
+
+3. **Open in browser**
+   ```
+   http://localhost:8000
+   ```
 
 ## 🎮 How to Use
 
