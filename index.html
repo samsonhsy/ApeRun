@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>源人步走 - 綠色能源教育App</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="app-container">
+      <!-- Top Bar -->
+      <div id="top-bar">
+        <div class="top-bar-content">
+          <img
+            src="assets/images/game-icon.png"
+            alt="源人步走"
+            class="game-icon"
+          />
+          <h1 class="game-title">源人步走</h1>
+        </div>
+      </div>
+
+      <!-- Home View -->
+      <div id="view-home" class="view active-view">
+        <h2>我的綠色家園</h2>
+
+        <!-- 2.5D 生態家園圖片區域 -->
+        <div class="eco-home-display">
+          <img
+            id="eco-home-image"
+            src="assets/images/eco-home-image.png"
+            alt="2.5D生態家園概念圖 - 展示太陽能板、風力發電機、智能家居系統和綠色植物的環保住宅"
+          />
+          <p class="image-caption">2.5D 生態家園概念展示</p>
+        </div>
+
+        <!-- 資源顯示區 -->
+        <div class="resource-display">
+          <p>環保評分：<span id="home-eco-score">10</span></p>
+          <div class="elements-display">
+            <p>可用能源元素：</p>
+            <div class="element-counters">
+              <span class="element-counter"
+                >Solara☀️: <span id="solara-count">50</span></span
+              >
+              <span class="element-counter"
+                >Wind🌬️: <span id="wind-count">30</span></span
+              >
+              <span class="element-counter"
+                >Aqua💧: <span id="aqua-count">0</span></span
+              >
+              <span class="element-counter"
+                >Bio-Fuel♻️: <span id="biofuel-count">0</span></span
+              >
+              <span class="element-counter"
+                >Kinetic⚡: <span id="kinetic-count">0</span></span
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- 可用設施區域 (預設解鎖) -->
+        <div class="available-facilities">
+          <h3>🔧 可用設施</h3>
+
+          <!-- 太陽能板設施 -->
+          <div class="home-facility available">
+            <h3>☀️ 太陽能板 (等級 <span id="solar-level-display">1</span>)</h3>
+            <p>目前產能: <span id="solar-rate-display">2</span> Solara/小時</p>
+            <button id="upgrade-solar-btn" class="upgrade-btn btn-animation">
+              升級太陽能板 (消耗 10 Solara☀️)
+            </button>
+            <button id="collect-solar-btn" class="collect-btn btn-animation">
+              收集能源 (<span class="white-text" id="solar-accumulated">0</span>
+              可收集)
+            </button>
+          </div>
+
+          <!-- 風力發電機設施 -->
+          <div class="home-facility available">
+            <h3>🌬️ 風力發電機 (等級 <span id="wind-level-display">1</span>)</h3>
+            <p>目前產能: <span id="wind-rate-display">2</span> Wind/小時</p>
+            <button id="upgrade-wind-btn" class="upgrade-btn btn-animation">
+              升級風力發電機 (消耗 10 Wind🌬️)
+            </button>
+            <button id="collect-wind-btn" class="collect-btn btn-animation">
+              收集能源 (<span class="white-text" id="wind-accumulated">0</span>
+              可收集)
+            </button>
+          </div>
+        </div>
+
+        <!-- 設施商店區域 (鎖定狀態) -->
+        <div class="facility-store">
+          <h3>🏪 設施商店 (概念展示)</h3>
+
+          <!-- 水力發電機設施 (鎖定) -->
+          <div class="home-facility locked">
+            <h3>💧 水力發電機 (等級 1)</h3>
+            <p>產能: 2 Aqua/小時</p>
+            <button id="buy-aqua-btn" class="buy-btn locked" disabled>
+              購買 (需要 500 Solara☀️)
+            </button>
+            <p class="lock-notice">⚠️ 原型版本中暫不開放購買</p>
+          </div>
+
+          <!-- 廚餘轉化器設施 (鎖定) -->
+          <div class="home-facility locked">
+            <h3>♻️ 廚餘轉化器 (等級 1)</h3>
+            <p>產能: 2 Bio-Fuel/小時</p>
+            <button id="buy-compost-btn" class="buy-btn locked" disabled>
+              購買 (需要 400 Wind🌬️)
+            </button>
+            <p class="lock-notice">⚠️ 原型版本中暫不開放購買</p>
+          </div>
+
+          <!-- 動能發電機設施 (鎖定) -->
+          <div class="home-facility locked">
+            <h3>⚡ 動能發電機 (等級 1)</h3>
+            <p>產能: 2 Kinetic/小時</p>
+            <button id="buy-kinetic-btn" class="buy-btn locked" disabled>
+              購買 (需要 600 混合能源)
+            </button>
+            <p class="lock-notice">⚠️ 原型版本中暫不開放購買</p>
+          </div>
+        </div>
+
+        <p class="info-text">
+          💡
+          提示：設施會定時產生能源，記得定期收集！升級設施可提高產能和存儲上限。
+        </p>
+      </div>
+
+      <!-- Explore View -->
+      <div id="view-explore" class="view">
+        <h2>香港綠蹤遊 (AR概念模擬)</h2>
+        <!-- 地圖區域 -->
+        <div id="map-container">
+          <div class="map-background">
+            <img src="assets/images/Map.png" alt="香港地圖" class="map-image" />
+
+            <!-- 太陽能熱點 -->
+            <div class="solar-hotspot" id="solar-hotspot">
+              <img
+                src="assets/images/solarHotspot.png"
+                alt="太陽能設施"
+                class="hotspot-image"
+              />
+              <button class="hotspot-interaction-btn" data-hotspot="zcb">
+                <i class="fas fa-video"></i> 查看設施
+              </button>
+            </div>
+
+            <!-- 猿人角色 -->
+            <div class="ape-avatar" id="ape-avatar">
+              <img
+                src="assets/images/apeAvatar.png"
+                alt="猿人角色"
+                class="avatar-image"
+              />
+            </div>
+          </div>
+
+          <!-- 資訊提示框 -->
+          <div class="map-info-box">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span class="info-text"
+              >提示：走近綠色能源設施，體驗AR技術獲取能源！完整版本將支援更多香港綠色地點。</span
+            >
+          </div>
+        </div>
+
+        <!-- AR資訊彈窗 -->
+        <div id="ar-popup-explore" style="display: none">
+          <h3 id="ar-popup-title-explore"></h3>
+          <p id="ar-popup-desc-explore"></p>
+
+          <!-- 視頻展示區域 -->
+          <div
+            class="video-container"
+            id="video-container-explore"
+            style="display: none"
+          >
+            <video
+              id="ar-video-explore"
+              controls
+              style="width: 100%; border-radius: 8px"
+            >
+              <source src="" type="video/mp4" />
+              您的瀏覽器不支援視頻播放。
+            </video>
+          </div>
+
+          <img
+            id="ar-popup-img-explore"
+            src=""
+            alt="熱點圖片"
+            style="display: none"
+          />
+
+          <p>
+            獎勵：<span id="ar-popup-reward-explore"></span>
+            <span id="ar-popup-reward-type"></span>
+          </p>
+
+          <div class="popup-buttons">
+            <button id="collect-reward-btn-explore">收集獎勵</button>
+            <button id="close-ar-popup-btn-explore">關閉</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info View -->
+      <div id="view-info" class="view">
+        <h2>關於「源人步走」</h2>
+
+        <section class="info-section">
+          <h3>🏆 團隊資訊</h3>
+          <p>
+            <strong>團隊名稱：</strong>綠色猿人<br />
+            <strong>所屬院校：</strong>香港中文大學<br />
+            <strong>參賽項目：</strong>三菱電機綠續創科盃2025
+          </p>
+        </section>
+
+        <section class="info-section">
+          <h3>🎮 遊戲概念</h3>
+          <p>透過遊戲化互動，讓玩家在虛擬世界中體驗綠色能源的魅力</p>
+        </section>
+
+        <section class="info-section">
+          <h3>🎯 玩法說明</h3>
+          <ul>
+            <li><strong>家園建設：</strong>升級各種綠色能源設施</li>
+            <li><strong>AR探索：</strong>發現香港各地的綠色能源熱點</li>
+            <li><strong>源動裝備：</strong>透過步行計步產生能量</li>
+          </ul>
+        </section>
+
+        <section class="info-section">
+          <h3>🌱 教育目標</h3>
+          <p>
+            提升市民對綠色能源的認知，推廣綠色生活方式，提升市民對綠色能源的接受程度和興趣
+          </p>
+        </section>
+
+        <section class="info-section">
+          <h3>⚙️ 原型說明</h3>
+          <p>
+            此為概念原型，專注於核心功能概念展示，未包含完整後端系統。所有數據僅存在於瀏覽器會話中，刷新頁面將重置所有進度。
+          </p>
+        </section>
+      </div>
+
+      <!-- Bottom Navigation -->
+      <nav id="bottom-nav">
+        <button id="nav-home" class="nav-btn active">
+          <i class="fas fa-home"></i>
+          <span class="white-text">家園</span>
+        </button>
+        <button id="nav-explore" class="nav-btn">
+          <i class="fas fa-map"></i>
+          <span class="white-text">探索</span>
+        </button>
+        <button id="nav-info" class="nav-btn">
+          <i class="fas fa-info-circle"></i>
+          <span class="white-text">資訊</span>
+        </button>
+      </nav>
+    </div>
+
+    <script src="js/script.js"></script>
+  </body>
+</html>
