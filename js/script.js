@@ -228,6 +228,70 @@ function setupHomeViewEvents() {
       );
     });
   });
+
+  // Energy Device Store functionality
+  setupEnergyDeviceStore();
+}
+
+// Energy Device Store Functionality
+function setupEnergyDeviceStore() {
+  const openBtn = document.getElementById("open-device-store-btn");
+  const closeBtn = document.getElementById("close-device-store-btn");
+  const popup = document.getElementById("energy-device-store-popup");
+  
+  // Check if elements exist
+  if (!openBtn || !closeBtn || !popup) {
+    console.error("Energy device store elements not found");
+    return;
+  }
+
+  // Open popup
+  openBtn.addEventListener("click", function () {
+    popup.style.display = "flex";
+    showNotification("能源收集裝置商店已開啟", "info");
+  });
+
+  // Close popup
+  closeBtn.addEventListener("click", function () {
+    popup.style.display = "none";
+  });
+
+  // Click outside to close popup
+  popup.addEventListener("click", function (event) {
+    if (event.target === this) {
+      this.style.display = "none";
+    }
+  });
+
+  // Device purchase attempt handling
+  const deviceButtons = document.querySelectorAll(".device-buy-btn.locked");
+  
+  deviceButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      const deviceType = this.dataset.device;
+      const deviceNames = {
+        "power-insole": "發電鞋墊",
+        "kinetic-wristband": "動能手環", 
+        "solar-watch": "太陽能手錶",
+        "wind-backpack": "風力背包",
+        "aqua-wristband": "水力腕帶"
+      };
+      
+      const deviceName = deviceNames[deviceType] || "未知裝置";
+      
+      showNotification(
+        `⚠️ ${deviceName} 在原型版本中暫不開放購買！\n\n完整版本功能預覽：\n• 消耗對應能源元素購買裝置\n• 自動收集日常活動產生的能源\n• 裝置升級系統\n• 佩戴效果視覺化`,
+        "info"
+      );
+    });
+  });
+
+  // ESC key to close popup
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && popup.style.display === "flex") {
+      popup.style.display = "none";
+    }
+  });
 }
 
 // Explore View Event Handlers

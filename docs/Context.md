@@ -360,7 +360,7 @@ touch assets/data/hotspots.json
 
 #### 顯示內容組件
 
-```html
+````html
 <div id="view-home" class="view active-view">
   <h2>我的綠色家園</h2>
 
@@ -466,52 +466,213 @@ touch assets/data/hotspots.json
   <p class="info-text">
     💡 提示：設施會定時產生能源，記得定期收集！升級設施可提高產能和存儲上限。
   </p>
+
+  <!-- 能源收集裝置商店按鈕 -->
+  <div class="energy-device-store-section">
+    <button id="open-device-store-btn" class="store-btn">
+      🛒 能源收集裝置商店
+    </button>
+    <p class="store-hint">購買特殊裝置，讓日常活動也能產生能源！</p>
+  </div>
 </div>
-```
 
-#### JavaScript 邏輯架構
+<!-- 能源收集裝置商店彈窗 -->
+<div
+  id="energy-device-store-popup"
+  class="popup-overlay"
+  style="display: none;"
+>
+  <div class="popup-content device-store-content">
+    <div class="popup-header">
+      <h3>🛒 能源收集裝置商店</h3>
+      <button id="close-device-store-btn" class="close-popup-btn">✕</button>
+    </div>
 
-##### 狀態變數 (State Variables)
+    <div class="popup-body">
+      <p class="store-description">
+        透過穿戴式裝置，將日常活動轉化為能源元素！每種裝置都有獨特的收集方式。
+      </p>
 
-```javascript
-// 遊戲狀態 - 能源元素系統
-let energyElements = {
-  solara: 50, // 初始太陽能元素
-  wind: 30, // 初始風力元素
-  aqua: 0, // 初始水力元素 (鎖定設施)
-  biofuel: 0, // 初始生物燃料元素 (鎖定設施)
-  kinetic: 0, // 初始動能元素 (鎖定設施)
-};
+      <!-- 裝置商品列表 -->
+      <div class="device-list">
+        <!-- 發電鞋墊 -->
+        <div class="device-item kinetic-device">
+          <div class="device-header">
+            <h4>⚡ 發電鞋墊</h4>
+            <span class="device-price">250 Kinetic⚡</span>
+          </div>
+          <div class="device-details">
+            <p class="device-description">
+              高科技壓電鞋墊，內建微型發電機。每一步都能將腳步的壓力轉化為電能，
+              是步行愛好者的最佳夥伴。適合日常通勤和運動時使用。
+            </p>
+            <div class="device-stats">
+              <span class="stat-item"
+                >📊 效率：每走 1000 步獲得 5 Kinetic⚡</span
+              >
+              <span class="stat-item">🔋 能源類型：動能 Kinetic⚡</span>
+              <span class="stat-item">⏱️ 收集方式：步行計步</span>
+              <span class="stat-item">💪 適用場景：日常步行、運動健身</span>
+            </div>
+          </div>
+          <button
+            class="device-buy-btn locked"
+            data-device="power-insole"
+            disabled
+          >
+            購買 (原型版本暫不開放)
+          </button>
+        </div>
 
-let ecoScore = 10; // 初始環保評分
+        <!-- 動能手環 -->
+        <div class="device-item kinetic-device">
+          <div class="device-header">
+            <h4>⚡ 動能手環</h4>
+            <span class="device-price">200 Kinetic⚡</span>
+          </div>
+          <div class="device-details">
+            <p class="device-description">
+              智能運動手環，配備動作感測器和微型渦輪發電機。
+              能夠識別各種運動模式，將手臂擺動轉化為電能。輕巧舒適，適合長期佩戴。
+            </p>
+            <div class="device-stats">
+              <span class="stat-item"
+                >📊 效率：每 30 分鐘運動獲得 3 Kinetic⚡</span
+              >
+              <span class="stat-item">🔋 能源類型：動能 Kinetic⚡</span>
+              <span class="stat-item">⏱️ 收集方式：運動時間計算</span>
+              <span class="stat-item">💪 適用場景：健身運動、日常活動</span>
+            </div>
+          </div>
+          <button
+            class="device-buy-btn locked"
+            data-device="kinetic-wristband"
+            disabled
+          >
+            購買 (原型版本暫不開放)
+          </button>
+        </div>
 
-// 可用設施等級和產能 (僅太陽能和風力)
-let availableFacilities = {
-  solar: {
-    level: 1,
-    rate: 2, // 每小時產能
-    accumulated: 0, // 累積待收集能源
-    maxStorage: 24, // 最大儲存量
-    lastUpdate: Date.now(), // 上次更新時間
-  },
-  wind: {
-    level: 1,
-    rate: 2,
-    accumulated: 0,
-    maxStorage: 24,
-    lastUpdate: Date.now(),
-  },
-};
+        <!-- 太陽能手錶 -->
+        <div class="device-item solar-device">
+          <div class="device-header">
+            <h4>☀️ 太陽能手錶</h4>
+            <span class="device-price">300 Solara☀️</span>
+          </div>
+          <div class="device-details">
+            <p class="device-description">
+              時尚太陽能智能手錶，表面覆蓋高效太陽能電池片。
+              即使在室內燈光下也能持續充電，是綠色生活的完美象徵。具備GPS定位功能。
+            </p>
+            <div class="device-stats">
+              <span class="stat-item"
+                >📊 效率：每小時戶外活動獲得 3 Solara☀️</span
+              >
+              <span class="stat-item">🔋 能源類型：太陽能 Solara☀️</span>
+              <span class="stat-item">⏱️ 收集方式：戶外時間計算</span>
+              <span class="stat-item">💪 適用場景：戶外活動、日光照射環境</span>
+            </div>
+          </div>
+          <button
+            class="device-buy-btn locked"
+            data-device="solar-watch"
+            disabled
+          >
+            購買 (原型版本暫不開放)
+          </button>
+        </div>
 
-// 鎖定設施 (僅供展示，不可購買)
-let lockedFacilities = {
-  aqua: { level: 1, rate: 2, cost: 500, costType: "solara" },
-  compost: { level: 1, rate: 2, cost: 400, costType: "wind" },
-  kinetic: { level: 1, rate: 2, cost: 600, costType: "mixed" },
-};
+        <!-- 風力背包 -->
+        <div class="device-item wind-device">
+          <div class="device-header">
+            <h4>🌬️ 風力背包</h4>
+            <span class="device-price">350 Wind🌬️</span>
+          </div>
+          <div class="device-details">
+            <p class="device-description">
+              創新風力發電背包，配備可折疊小型風力渦輪。
+              背包頂部的風輪在步行時轉動發電，越快的移動速度產生越多能源。輕量化設計。
+            </p>
+            <div class="device-stats">
+              <span class="stat-item"
+                >📊 效率：每公里步行距離獲得 4 Wind🌬️</span
+              >
+              <span class="stat-item">🔋 能源類型：風力 Wind🌬️</span>
+              <span class="stat-item">⏱️ 收集方式：移動距離計算</span>
+              <span class="stat-item"
+                >💪 適用場景：快速步行、騎車、戶外活動</span
+              >
+            </div>
+          </div>
+          <button
+            class="device-buy-btn locked"
+            data-device="wind-backpack"
+            disabled
+          >
+            購買 (原型版本暫不開放)
+          </button>
+        </div>
 
-const upgradeCost = 10; // 升級成本
-```
+        <!-- 水力腕帶 -->
+        <div class="device-item aqua-device">
+          <div class="device-header">
+            <h4>💧 水力腕帶</h4>
+            <span class="device-price">280 Aqua💧</span>
+          </div>
+          <div class="device-details">
+            <p class="device-description">
+              防水運動腕帶，內建微型水力發電裝置。
+              運動時產生的汗液和接觸的水分都能轉化為電能。特別適合游泳和高強度運動。
+            </p>
+            <div class="device-stats">
+              <span class="stat-item"
+                >📊 效率：每 30 分鐘運動時間獲得 2 Aqua💧</span
+              >
+              <span class="stat-item">🔋 能源類型：水力 Aqua💧</span>
+              <span class="stat-item">⏱️ 收集方式：運動時間計算</span>
+              <span class="stat-item"
+                >💪 適用場景：游泳、高強度運動、潮濕環境</span
+              >
+            </div>
+          </div>
+          <button
+            class="device-buy-btn locked"
+            data-device="aqua-wristband"
+            disabled
+          >
+            購買 (原型版本暫不開放)
+          </button>
+        </div>
+      </div>
+
+      <!-- 原型版本說明 -->
+      <div class="prototype-notice">
+        <h4>⚠️ 原型版本限制說明</h4>
+        <ul>
+          <li>目前版本僅供展示，無法實際購買裝置</li>
+          <li>完整版本將支援裝置購買和佩戴系統</li>
+          <li>裝置效果將與真實運動數據整合</li>
+          <li>未來將加入裝置升級和自定義功能</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+#### JavaScript 邏輯架構 ##### 狀態變數 (State Variables) ```javascript //
+遊戲狀態 - 能源元素系統 let energyElements = { solara: 50, // 初始太陽能元素
+wind: 30, // 初始風力元素 aqua: 0, // 初始水力元素 (鎖定設施) biofuel: 0, //
+初始生物燃料元素 (鎖定設施) kinetic: 0, // 初始動能元素 (鎖定設施) }; let
+ecoScore = 10; // 初始環保評分 // 可用設施等級和產能 (僅太陽能和風力) let
+availableFacilities = { solar: { level: 1, rate: 2, // 每小時產能 accumulated:
+0, // 累積待收集能源 maxStorage: 24, // 最大儲存量 lastUpdate: Date.now(), //
+上次更新時間 }, wind: { level: 1, rate: 2, accumulated: 0, maxStorage: 24,
+lastUpdate: Date.now(), }, }; // 鎖定設施 (僅供展示，不可購買) let
+lockedFacilities = { aqua: { level: 1, rate: 2, cost: 500, costType: "solara" },
+compost: { level: 1, rate: 2, cost: 400, costType: "wind" }, kinetic: { level:
+1, rate: 2, cost: 600, costType: "mixed" }, }; const upgradeCost = 10; //
+升級成本
+````
 
 ##### 核心函數
 
@@ -649,6 +810,46 @@ document
 document.querySelectorAll(".buy-btn.locked").forEach((button) => {
   button.addEventListener("click", function () {
     alert("⚠️ 此功能在原型版本中暫不開放！\n完整版本將支援購買新設施。");
+  });
+});
+
+// 能源收集裝置商店彈窗控制
+document
+  .getElementById("open-device-store-btn")
+  .addEventListener("click", function () {
+    document.getElementById("energy-device-store-popup").style.display = "flex";
+  });
+
+document
+  .getElementById("close-device-store-btn")
+  .addEventListener("click", function () {
+    document.getElementById("energy-device-store-popup").style.display = "none";
+  });
+
+// 點擊彈窗背景關閉彈窗
+document
+  .getElementById("energy-device-store-popup")
+  .addEventListener("click", function (event) {
+    if (event.target === this) {
+      this.style.display = "none";
+    }
+  });
+
+// 裝置購買嘗試處理 (原型版本限制)
+document.querySelectorAll(".device-buy-btn.locked").forEach((button) => {
+  button.addEventListener("click", function () {
+    const deviceType = this.dataset.device;
+    const deviceNames = {
+      "power-insole": "發電鞋墊",
+      "kinetic-wristband": "動能手環",
+      "solar-watch": "太陽能手錶",
+      "wind-backpack": "風力背包",
+      "aqua-wristband": "水力腕帶",
+    };
+
+    alert(
+      `⚠️ ${deviceNames[deviceType]} 在原型版本中暫不開放購買！\n\n完整版本功能預覽：\n• 消耗對應能源元素購買裝置\n• 自動收集日常活動產生的能源\n• 裝置升級系統\n• 佩戴效果視覺化`
+    );
   });
 });
 ```
@@ -845,7 +1046,6 @@ function getEnergyElementDisplay(type) {
     <h3>⚙️ 原型說明</h3>
     <p>此為概念原型，專注於核心功能概念展示，未包含完整後端系統...</p>
   </section>
-
 </div>
 ```
 
@@ -870,22 +1070,263 @@ function getEnergyElementDisplay(type) {
 - 視圖容器樣式
 - 按鈕與互動元素樣式
 - 彈窗樣式
+- 能源收集裝置商店樣式
 
-### 資源文件結構
+#### 能源收集裝置商店 CSS 規格
 
-```
-assets/
-├── images/
-│   ├── hotspots/
-│   │   ├── zcb_placeholder.jpg
-│   │   ├── tpark_placeholder.jpg
-│   │   └── gc_placeholder.jpg
-│   ├── icons/
-│   │   ├── home-icon.svg
-│   │   ├── explore-icon.svg
-│   │   └── info-icon.svg
-│   └── backgrounds/
-└── fonts/ (可選)
+```css
+/* 商店按鈕樣式 */
+.energy-device-store-section {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.store-btn {
+  background: linear-gradient(135deg, #4caf50, #45a049);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.store-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.store-hint {
+  font-size: 14px;
+  color: #666;
+  margin-top: 8px;
+}
+
+/* 彈窗覆蓋層 */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* 彈窗內容容器 */
+.device-store-content {
+  background: white;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* 彈窗標題區 */
+.popup-header {
+  background: linear-gradient(135deg, #4caf50, #45a049);
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.popup-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.close-popup-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-popup-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* 彈窗主體內容 */
+.popup-body {
+  padding: 20px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.store-description {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* 裝置列表 */
+.device-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* 裝置項目 */
+.device-item {
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 15px;
+  transition: all 0.3s ease;
+}
+
+.device-item:hover {
+  border-color: #4caf50;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 不同能源類型的邊框顏色 */
+.kinetic-device {
+  border-left: 4px solid #ff9800;
+}
+.solar-device {
+  border-left: 4px solid #ffc107;
+}
+.wind-device {
+  border-left: 4px solid #03a9f4;
+}
+.aqua-device {
+  border-left: 4px solid #00bcd4;
+}
+
+/* 裝置標題區 */
+.device-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.device-header h4 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.device-price {
+  background: #f0f0f0;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #666;
+}
+
+/* 裝置詳情 */
+.device-details {
+  margin-bottom: 15px;
+}
+
+.device-description {
+  font-size: 13px;
+  color: #555;
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+.device-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-item {
+  font-size: 12px;
+  color: #777;
+  padding: 2px 0;
+}
+
+/* 購買按鈕 */
+.device-buy-btn {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.device-buy-btn.locked {
+  background: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+
+.device-buy-btn.locked:hover {
+  background: #bbb;
+}
+
+/* 原型版本說明 */
+.prototype-notice {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 8px;
+  padding: 15px;
+  margin-top: 20px;
+}
+
+.prototype-notice h4 {
+  margin: 0 0 10px 0;
+  color: #856404;
+  font-size: 14px;
+}
+
+.prototype-notice ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.prototype-notice li {
+  font-size: 12px;
+  color: #856404;
+  margin-bottom: 5px;
+}
+
+/* 響應式設計 */
+@media (max-width: 480px) {
+  .device-store-content {
+    width: 95%;
+    margin: 10px;
+  }
+
+  .popup-body {
+    padding: 15px;
+  }
+
+  .device-item {
+    padding: 12px;
+  }
+
+  .device-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+}
 ```
 
 ---
