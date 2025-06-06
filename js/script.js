@@ -160,7 +160,10 @@ function setupHomeViewEvents() {
       if (energyElements.solara >= upgradeCost) {
         energyElements.solara -= upgradeCost;
         availableFacilities.solar.level++;
-        availableFacilities.solar.rate = availableFacilities.solar.level * 2;
+        // Generate rate grows by 6 every level (starting from level 1 base rate of 2)
+        availableFacilities.solar.rate =
+          2 + (availableFacilities.solar.level - 1) * 6;
+        // Storage increases by 10 every level
         availableFacilities.solar.maxStorage =
           availableFacilities.solar.level * 10;
         ecoScore += 5;
@@ -193,7 +196,10 @@ function setupHomeViewEvents() {
       if (energyElements.wind >= upgradeCost) {
         energyElements.wind -= upgradeCost;
         availableFacilities.wind.level++;
-        availableFacilities.wind.rate = availableFacilities.wind.level * 2;
+        // Generate rate grows by 6 every level (starting from level 1 base rate of 2)
+        availableFacilities.wind.rate =
+          2 + (availableFacilities.wind.level - 1) * 6;
+        // Storage increases by 10 every level
         availableFacilities.wind.maxStorage =
           availableFacilities.wind.level * 10;
         ecoScore += 5;
