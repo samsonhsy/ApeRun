@@ -491,6 +491,15 @@ function setupExploreViewEvents() {
   ) {
     animateAvatar();
   }
+
+  // AR Scan button event listener
+  const arScanBtn = document.getElementById("ar-scan-btn-explore");
+  if (arScanBtn) {
+    arScanBtn.addEventListener("click", function () {
+      console.log("AR Scan button clicked"); // Debug log
+      startARSimulation();
+    });
+  }
 }
 
 // Avatar animation function
@@ -919,3 +928,225 @@ function testEventHandlers() {
 
 // Add to window for debugging
 window.testEventHandlers = testEventHandlers;
+
+// AR Simulation Functions
+let arCollectedTotal = 0;
+let arSimulationActive = false;
+
+function startARSimulation() {
+  console.log("Starting AR simulation"); // Debug log
+
+  // Hide the info popup and show AR simulation
+  document.getElementById("ar-popup-explore").style.display = "none";
+  document.getElementById("ar-simulation-popup").style.display = "flex";
+
+  arSimulationActive = true;
+  arCollectedTotal = 0;
+
+  // Update total display
+  document.getElementById("total-collected-amount").textContent =
+    arCollectedTotal;
+
+  // Start the AR scanning sequence
+  setTimeout(() => {
+    startScanningSequence();
+  }, 500);
+
+  // Setup AR event listeners
+  setupAREventListeners();
+
+  showNotification("AR掃描已啟動！", "info");
+}
+
+function startScanningSequence() {
+  console.log("Starting scanning sequence"); // Debug log
+
+  // Show scanning elements
+  document.getElementById("ar-scanning-grid").style.display = "block";
+  document.getElementById("ar-scanning-text").style.display = "block";
+
+  // Hide other elements initially
+  document.getElementById("ar-detection-target").style.display = "none";
+  document.getElementById("ar-info-panel").style.display = "none";
+  document.getElementById("ar-energy-points").style.display = "none";
+  document.getElementById("ar-collection-status").style.display = "none";
+
+  // Sequence: Scanning (3s) → Detection (2s) → Info Panel (2s) → Energy Points
+  setTimeout(() => {
+    // Show detection target
+    document.getElementById("ar-detection-target").style.display = "block";
+    updateScanningText("設施已偵測！", "鎖定太陽能設施中...");
+  }, 3000);
+
+  setTimeout(() => {
+    // Show info panel
+    document.getElementById("ar-info-panel").style.display = "block";
+    updateScanningText("分析完成！", "能源數據已載入");
+  }, 5000);
+
+  setTimeout(() => {
+    // Hide scanning elements and show energy collection
+    document.getElementById("ar-scanning-grid").style.display = "none";
+    document.getElementById("ar-scanning-text").style.display = "none";
+    document.getElementById("ar-detection-target").style.display = "none";
+
+    // Show energy collection points and status
+    document.getElementById("ar-energy-points").style.display = "block";
+    document.getElementById("ar-collection-status").style.display = "block";
+    document.getElementById("ar-complete-btn").style.display = "block";
+
+    showNotification("能源收集點已顯示！點擊收集Solara☀️", "success");
+  }, 7000);
+}
+
+function updateScanningText(mainText, statusText) {
+  const dotsElement = document.querySelector(".scanning-dots");
+  const statusElement = document.querySelector(".scanning-status");
+
+  if (dotsElement) dotsElement.innerHTML = mainText;
+  if (statusElement) statusElement.textContent = statusText;
+}
+
+function setupAREventListeners() {
+  // Energy point collection
+  const energyPoints = document.querySelectorAll(".energy-point");
+  energyPoints.forEach((point) => {
+    // Remove existing listeners
+    point.replaceWith(point.cloneNode(true));
+  });
+
+  // Re-add listeners to cloned elements
+  document.querySelectorAll(".energy-point").forEach((point) => {
+    point.addEventListener("click", function () {
+      if (!arSimulationActive) return;
+
+      const energyAmount = parseInt(this.dataset.energy);
+      collectAREnergy(this, energyAmount);
+    });
+  });
+
+  // AR control buttons
+  const exitBtn = document.getElementById("ar-exit-btn");
+  const completeBtn = document.getElementById("ar-complete-btn");
+
+  if (exitBtn) {
+    exitBtn.replaceWith(exitBtn.cloneNode(true));
+    document
+      .getElementById("ar-exit-btn")
+      .addEventListener("click", function () {
+        exitARSimulation(false);
+      });
+  }
+
+  if (completeBtn) {
+    completeBtn.replaceWith(completeBtn.cloneNode(true));
+    document
+      .getElementById("ar-complete-btn")
+      .addEventListener("click", function () {
+        completeARCollection();
+      });
+  }
+}
+
+function collectAREnergy(pointElement, amount) {
+  console.log(`Collecting ${amount} energy from AR point`); // Debug log
+
+  // Add collection animation
+  pointElement.classList.add("energy-collected");
+
+  // Update total
+  arCollectedTotal += amount;
+  document.getElementById("total-collected-amount").textContent =
+    arCollectedTotal;
+
+  // Remove the energy point
+  setTimeout(() => {
+    pointElement.style.display = "none";
+  }, 800);
+
+  // Check if all points collected
+  const remainingPoints = document.querySelectorAll(
+    ".energy-point:not(.energy-collected)"
+  );
+  if (remainingPoints.length === 1) {
+    // Only 1 left means we just collected the last visible one
+    setTimeout(() => {
+      updateCollectionStatus("所有能源已收集！", "點擊完成按鈕返回地圖");
+    }, 1000);
+  }
+
+  showNotification(`收集了 ${amount} Solara☀️！`, "success");
+}
+
+function updateCollectionStatus(message, subMessage) {
+  const messageElement = document.querySelector(".collection-text");
+  const totalElement = document.querySelector(".total-collected");
+
+  if (messageElement) messageElement.textContent = message;
+  if (subMessage && totalElement) {
+    totalElement.innerHTML = `${subMessage}<br>總共收集: <span id="total-collected-amount">${arCollectedTotal}</span> Solara☀️`;
+  }
+}
+
+function completeARCollection() {
+  console.log(`Completing AR collection with ${arCollectedTotal} total energy`); // Debug log
+
+  // Add energy to game state
+  energyElements.solara += arCollectedTotal;
+
+  // Show completion message
+  showNotification(`AR收集完成！獲得 ${arCollectedTotal} Solara☀️`, "success");
+
+  // Exit AR simulation
+  exitARSimulation(true);
+
+  // Update displays
+  updateAllDisplays();
+}
+
+function exitARSimulation(completed = false) {
+  console.log(`Exiting AR simulation. Completed: ${completed}`); // Debug log
+
+  arSimulationActive = false;
+
+  // Hide AR simulation popup
+  document.getElementById("ar-simulation-popup").style.display = "none";
+
+  // Reset AR elements for next time
+  resetARElements();
+
+  if (completed) {
+    showNotification("AR體驗完成！能源已加入您的收藏", "success");
+  } else {
+    showNotification("AR體驗已退出", "info");
+  }
+}
+
+function resetARElements() {
+  // Reset all AR overlay elements to initial state
+  document.getElementById("ar-scanning-grid").style.display = "block";
+  document.getElementById("ar-scanning-text").style.display = "block";
+  document.getElementById("ar-detection-target").style.display = "none";
+  document.getElementById("ar-info-panel").style.display = "none";
+  document.getElementById("ar-energy-points").style.display = "none";
+  document.getElementById("ar-collection-status").style.display = "none";
+  document.getElementById("ar-complete-btn").style.display = "none";
+
+  // Reset scanning text
+  updateScanningText(
+    '掃描中<span class="dots">...</span>',
+    "正在分析綠色能源設施"
+  );
+
+  // Reset energy points
+  const energyPoints = document.querySelectorAll(".energy-point");
+  energyPoints.forEach((point) => {
+    point.style.display = "block";
+    point.classList.remove("energy-collected");
+  });
+
+  // Reset total
+  arCollectedTotal = 0;
+  document.getElementById("total-collected-amount").textContent =
+    arCollectedTotal;
+}

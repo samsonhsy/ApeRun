@@ -225,8 +225,153 @@
           </p>
 
           <div class="popup-buttons">
-            <button id="collect-reward-btn-explore">收集獎勵</button>
+            <button id="ar-scan-btn-explore">🔍 開始AR掃描</button>
+            <button id="collect-reward-btn-explore" style="display: none">
+              收集獎勵
+            </button>
             <button id="close-ar-popup-btn-explore">關閉</button>
+          </div>
+        </div>
+
+        <!-- AR Video Simulation Popup -->
+        <div
+          id="ar-simulation-popup"
+          class="ar-popup-overlay"
+          style="display: none"
+        >
+          <div class="ar-popup-content">
+            <!-- Video Background -->
+            <div class="ar-video-container">
+              <video
+                id="ar-simulation-video"
+                autoplay
+                muted
+                loop
+                playsinline
+                class="ar-background-video"
+              >
+                <source
+                  src="assets/images/hotspot-video.mp4"
+                  type="video/mp4"
+                />
+                您的瀏覽器不支援視頻播放。
+              </video>
+
+              <!-- AR Overlay Elements -->
+              <div class="ar-overlay">
+                <!-- Scanning Grid -->
+                <div class="ar-scanning-grid" id="ar-scanning-grid">
+                  <div class="grid-line grid-line-h"></div>
+                  <div class="grid-line grid-line-h"></div>
+                  <div class="grid-line grid-line-h"></div>
+                  <div class="grid-line grid-line-v"></div>
+                  <div class="grid-line grid-line-v"></div>
+                </div>
+
+                <!-- Scanning Text -->
+                <div class="ar-scanning-text" id="ar-scanning-text">
+                  <div class="scanning-dots">
+                    掃描中<span class="dots">...</span>
+                  </div>
+                  <div class="scanning-status">正在分析綠色能源設施</div>
+                </div>
+
+                <!-- Detection Target -->
+                <div
+                  class="ar-detection-target"
+                  id="ar-detection-target"
+                  style="display: none"
+                >
+                  <div class="target-crosshair">
+                    <div class="crosshair-line crosshair-h"></div>
+                    <div class="crosshair-line crosshair-v"></div>
+                  </div>
+                  <div class="target-pulse"></div>
+                </div>
+
+                <!-- Information Panel -->
+                <div
+                  class="ar-info-panel"
+                  id="ar-info-panel"
+                  style="display: none"
+                >
+                  <div class="panel-header">
+                    <h3>🏢 零碳天地</h3>
+                    <div class="energy-type-indicator">
+                      <span class="energy-icon">☀️</span>
+                      <span class="energy-label">太陽能設施</span>
+                    </div>
+                  </div>
+                  <div class="panel-content">
+                    <div class="facility-stats">
+                      <div class="stat-item">
+                        <span class="stat-label">能源產出:</span>
+                        <span class="stat-value">1200 kW/h</span>
+                      </div>
+                      <div class="stat-item">
+                        <span class="stat-label">碳減排:</span>
+                        <span class="stat-value">800 kg CO₂/日</span>
+                      </div>
+                      <div class="stat-item">
+                        <span class="stat-label">設施狀態:</span>
+                        <span class="stat-value status-active">正常運行</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Energy Collection Points -->
+                <div
+                  class="ar-energy-points"
+                  id="ar-energy-points"
+                  style="display: none"
+                >
+                  <div class="energy-point energy-point-1" data-energy="5">
+                    <div class="energy-orb">☀️</div>
+                    <div class="energy-amount">+5</div>
+                  </div>
+                  <div class="energy-point energy-point-2" data-energy="8">
+                    <div class="energy-orb">☀️</div>
+                    <div class="energy-amount">+8</div>
+                  </div>
+                  <div class="energy-point energy-point-3" data-energy="12">
+                    <div class="energy-orb">☀️</div>
+                    <div class="energy-amount">+12</div>
+                  </div>
+                </div>
+
+                <!-- Collection Status -->
+                <div
+                  class="ar-collection-status"
+                  id="ar-collection-status"
+                  style="display: none"
+                >
+                  <div class="collection-message">
+                    <span class="collection-icon">✨</span>
+                    <span class="collection-text"
+                      >點擊太陽能球體收集能源！</span
+                    >
+                  </div>
+                  <div class="total-collected">
+                    已收集: <span id="total-collected-amount">0</span> Solara☀️
+                  </div>
+                </div>
+              </div>
+
+              <!-- AR Control Buttons -->
+              <div class="ar-controls">
+                <button id="ar-exit-btn" class="ar-control-btn exit-btn">
+                  <i class="fas fa-times"></i> 退出AR
+                </button>
+                <button
+                  id="ar-complete-btn"
+                  class="ar-control-btn complete-btn"
+                  style="display: none"
+                >
+                  <i class="fas fa-check"></i> 完成收集
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
