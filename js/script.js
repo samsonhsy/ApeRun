@@ -183,9 +183,8 @@ function setupHomeViewEvents() {
         energyElements.solara += collected;
         availableFacilities.solar.accumulated = 0;
         updateAllDisplays();
-        showNotification(`成功收集 ${collected} Solara☀️！`, "success");
       } else {
-        showNotification("目前沒有可收集的太陽能！", "info");
+        // No notification for "no energy available" - user can see from UI
       }
     });
 
@@ -219,19 +218,15 @@ function setupHomeViewEvents() {
         energyElements.wind += collected;
         availableFacilities.wind.accumulated = 0;
         updateAllDisplays();
-        showNotification(`成功收集 ${collected} Wind🌬️！`, "success");
       } else {
-        showNotification("目前沒有可收集的風力能源！", "info");
+        // No notification for "no energy available" - user can see from UI
       }
     });
 
   // Locked facility purchase attempts
   document.querySelectorAll(".buy-btn.locked").forEach((button) => {
     button.addEventListener("click", function () {
-      showNotification(
-        "⚠️ 此功能在原型版本中暫不開放！\n完整版本將支援購買新設施。",
-        "info"
-      );
+      showNotification("此功能在原型版本中暫不開放", "info");
     });
   });
 
@@ -257,7 +252,7 @@ function setupEnergyDeviceStore() {
   // Open popup
   openBtn.addEventListener("click", function () {
     popup.style.display = "flex";
-    showNotification("能源收集裝置商店已開啟", "info");
+    // Remove store opening notification
   });
 
   // Close popup
@@ -272,26 +267,12 @@ function setupEnergyDeviceStore() {
     }
   });
 
-  // Device purchase attempt handling
+  // Device purchase attempt handling - simplified
   const deviceButtons = document.querySelectorAll(".device-buy-btn.locked");
 
   deviceButtons.forEach((button) => {
     button.addEventListener("click", function () {
-      const deviceType = this.dataset.device;
-      const deviceNames = {
-        "power-insole": "發電鞋墊",
-        "kinetic-wristband": "動能手環",
-        "solar-watch": "太陽能手錶",
-        "wind-backpack": "風力背包",
-        "aqua-wristband": "水力腕帶",
-      };
-
-      const deviceName = deviceNames[deviceType] || "未知裝置";
-
-      showNotification(
-        `⚠️ ${deviceName} 在原型版本中暫不開放購買！\n\n完整版本功能預覽：\n• 消耗對應能源元素購買裝置\n• 自動收集日常活動產生的能源\n• 裝置升級系統\n• 佩戴效果視覺化`,
-        "info"
-      );
+      showNotification("此功能在原型版本中暫不開放", "info");
     });
   });
 
@@ -334,13 +315,10 @@ function setupFacilityStore() {
     }
   });
 
-  // Setup facility purchase buttons (locked state)
+  // Setup facility purchase buttons (locked state) - simplified
   document.querySelectorAll(".facility-buy-btn.locked").forEach((button) => {
     button.addEventListener("click", function () {
-      showNotification(
-        "⚠️ 此功能在原型版本中暫不開放！\n完整版本將支援購買新設施。",
-        "info"
-      );
+      showNotification("此功能在原型版本中暫不開放", "info");
     });
   });
 }
@@ -359,131 +337,145 @@ function setupExploreViewEvents() {
 
   console.log("Setting up explore view events - all elements found"); // Debug log
 
-  // Hotspot interaction button click
-  hotspotBtn.addEventListener("click", function (event) {
-    const hotspotId = event.target.dataset.hotspot;
-    const data = hotspotDataExplore[hotspotId];
+  // Check if hotspot button already has event listener to prevent duplicates
+  if (!hotspotBtn.hasAttribute("data-event-attached")) {
+    // Hotspot interaction button click
+    hotspotBtn.addEventListener("click", function (event) {
+      const hotspotId = event.target.dataset.hotspot;
+      const data = hotspotDataExplore[hotspotId];
 
-    if (data) {
-      // Update popup content
-      document.getElementById("ar-popup-title-explore").textContent =
-        data.title;
-      document.getElementById("ar-popup-desc-explore").textContent = data.desc;
-      document.getElementById("ar-popup-reward-explore").textContent =
-        data.reward.amount;
-      document.getElementById("ar-popup-reward-type").textContent =
-        getEnergyElementDisplay(data.reward.type);
+      if (data) {
+        // Update popup content
+        document.getElementById("ar-popup-title-explore").textContent =
+          data.title;
+        document.getElementById("ar-popup-desc-explore").textContent =
+          data.desc;
+        document.getElementById("ar-popup-reward-explore").textContent =
+          data.reward.amount;
+        document.getElementById("ar-popup-reward-type").textContent =
+          getEnergyElementDisplay(data.reward.type);
 
-      // Hide image and video initially
-      document.getElementById("ar-popup-img-explore").style.display = "none";
-      document.getElementById("video-container-explore").style.display = "none";
+        // Hide image and video initially
+        document.getElementById("ar-popup-img-explore").style.display = "none";
+        document.getElementById("video-container-explore").style.display =
+          "none";
 
-      // Check if video is available
-      if (data.videoEmbedId) {
-        // Show YouTube video if available
-        const videoContainer = document.getElementById(
-          "video-container-explore"
+        // Check if video is available
+        if (data.videoEmbedId) {
+          // Show YouTube video if available
+          const videoContainer = document.getElementById(
+            "video-container-explore"
+          );
+
+          // Clear existing content and create iframe
+          videoContainer.innerHTML = "";
+          const iframe = document.createElement("iframe");
+          iframe.width = "100%";
+          iframe.height = "200";
+          iframe.src = `https://www.youtube.com/embed/${data.videoEmbedId}`;
+          iframe.title = "Zero Carbon Building - Green Energy Education";
+          iframe.frameBorder = "0";
+          iframe.allow =
+            "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+          iframe.allowFullscreen = true;
+          iframe.style.borderRadius = "8px";
+
+          videoContainer.appendChild(iframe);
+          videoContainer.style.display = "block";
+
+          console.log("YouTube video iframe created successfully"); // Debug log
+          // Remove duplicate notification - video loading is obvious to user
+        } else {
+          // Show placeholder image if no video
+          const img = document.getElementById("ar-popup-img-explore");
+          img.src = data.img;
+          img.style.display = "block";
+          img.onerror = function () {
+            this.style.display = "none";
+          };
+        }
+
+        // Store current reward
+        currentReward = data.reward;
+        console.log("Current reward set:", currentReward); // Debug log
+
+        // Show popup
+        document.getElementById("ar-popup-explore").style.display = "block";
+        console.log("AR popup displayed"); // Debug log
+
+        // Single notification only - no need for multiple alerts
+        showNotification("設施資訊已載入", "success");
+      }
+    });
+
+    // Mark button as having event listener attached
+    hotspotBtn.setAttribute("data-event-attached", "true");
+  }
+
+  // Check if collect button already has event listener
+  if (!collectBtn.hasAttribute("data-event-attached")) {
+    // Reward collection
+    collectBtn.addEventListener("click", function () {
+      console.log("Collect reward button clicked"); // Debug log
+      console.log("Current reward:", currentReward); // Debug log
+
+      if (currentReward) {
+        console.log(
+          `Adding ${currentReward.amount} ${currentReward.type} energy`
+        ); // Debug log
+
+        // Add reward to energy elements
+        switch (currentReward.type) {
+          case "solara":
+            energyElements.solara += currentReward.amount;
+            break;
+          case "wind":
+            energyElements.wind += currentReward.amount;
+            break;
+          case "aqua":
+            energyElements.aqua += currentReward.amount;
+            break;
+          case "biofuel":
+            energyElements.biofuel += currentReward.amount;
+            break;
+          case "kinetic":
+            energyElements.kinetic += currentReward.amount;
+            break;
+          default:
+            console.error("Unknown reward type:", currentReward.type);
+            return;
+        }
+
+        console.log("Updated energy elements:", energyElements); // Debug log
+        updateAllDisplays();
+        document.getElementById("ar-popup-explore").style.display = "none";
+        showNotification(
+          `獎勵已收集！您獲得了 ${
+            currentReward.amount
+          } ${getEnergyElementDisplay(currentReward.type)}`,
+          "success"
         );
-
-        // Clear existing content and create iframe
-        videoContainer.innerHTML = "";
-        const iframe = document.createElement("iframe");
-        iframe.width = "100%";
-        iframe.height = "200";
-        iframe.src = `https://www.youtube.com/embed/${data.videoEmbedId}`;
-        iframe.title = "Zero Carbon Building - Green Energy Education";
-        iframe.frameBorder = "0";
-        iframe.allow =
-          "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-        iframe.allowFullscreen = true;
-        iframe.style.borderRadius = "8px";
-
-        videoContainer.appendChild(iframe);
-        videoContainer.style.display = "block";
-
-        console.log("YouTube video iframe created successfully"); // Debug log
-        showNotification("正在載入AR設施展示視頻...", "info");
+        currentReward = null;
+        console.log("Reward collection completed successfully"); // Debug log
       } else {
-        // Show placeholder image if no video
-        const img = document.getElementById("ar-popup-img-explore");
-        img.src = data.img;
-        img.style.display = "block";
-        img.onerror = function () {
-          this.style.display = "none";
-        };
+        console.warn("No current reward to collect"); // Debug log
+        showNotification("沒有可收集的獎勵", "warning");
       }
+    });
 
-      // Store current reward
-      currentReward = data.reward;
-      console.log("Current reward set:", currentReward); // Debug log
+    collectBtn.setAttribute("data-event-attached", "true");
+  }
 
-      // Show popup
-      document.getElementById("ar-popup-explore").style.display = "block";
-      console.log("AR popup displayed"); // Debug log
-
-      // Show notification about video functionality
-      if (data.videoEmbedId) {
-        showNotification("AR設施展示視頻已載入！", "success");
-      } else {
-        showNotification("AR設施展示 - 圖片模式", "info");
-      }
-    }
-  });
-
-  // Reward collection
-  collectBtn.addEventListener("click", function () {
-    console.log("Collect reward button clicked"); // Debug log
-    console.log("Current reward:", currentReward); // Debug log
-
-    if (currentReward) {
-      console.log(
-        `Adding ${currentReward.amount} ${currentReward.type} energy`
-      ); // Debug log
-
-      // Add reward to energy elements
-      switch (currentReward.type) {
-        case "solara":
-          energyElements.solara += currentReward.amount;
-          break;
-        case "wind":
-          energyElements.wind += currentReward.amount;
-          break;
-        case "aqua":
-          energyElements.aqua += currentReward.amount;
-          break;
-        case "biofuel":
-          energyElements.biofuel += currentReward.amount;
-          break;
-        case "kinetic":
-          energyElements.kinetic += currentReward.amount;
-          break;
-        default:
-          console.error("Unknown reward type:", currentReward.type);
-          return;
-      }
-
-      console.log("Updated energy elements:", energyElements); // Debug log
-      updateAllDisplays();
+  // Check if close button already has event listener
+  if (!closeBtn.hasAttribute("data-event-attached")) {
+    // Close popup
+    closeBtn.addEventListener("click", function () {
       document.getElementById("ar-popup-explore").style.display = "none";
-      showNotification(
-        `獎勵已收集！您獲得了 ${currentReward.amount} ${getEnergyElementDisplay(
-          currentReward.type
-        )}`,
-        "success"
-      );
       currentReward = null;
-      console.log("Reward collection completed successfully"); // Debug log
-    } else {
-      console.warn("No current reward to collect"); // Debug log
-      showNotification("沒有可收集的獎勵", "warning");
-    }
-  });
+    });
 
-  // Close popup
-  closeBtn.addEventListener("click", function () {
-    document.getElementById("ar-popup-explore").style.display = "none";
-    currentReward = null;
-  });
+    closeBtn.setAttribute("data-event-attached", "true");
+  }
 
   // Add avatar animation on view switch
   if (
@@ -494,11 +486,13 @@ function setupExploreViewEvents() {
 
   // AR Scan button event listener
   const arScanBtn = document.getElementById("ar-scan-btn-explore");
-  if (arScanBtn) {
+  if (arScanBtn && !arScanBtn.hasAttribute("data-event-attached")) {
     arScanBtn.addEventListener("click", function () {
       console.log("AR Scan button clicked"); // Debug log
       startARSimulation();
     });
+
+    arScanBtn.setAttribute("data-event-attached", "true");
   }
 }
 
@@ -756,46 +750,44 @@ function showNotification(message, type = "info") {
   notification.className = `notification notification-${type}`;
   notification.textContent = message;
 
-  // Style the notification to be centered in mobile app container
+  // Style the notification to be smaller and less intrusive
   notification.style.cssText = `
         position: fixed;
-        top: 50%;
+        top: 20%;
         left: 50%;
         transform: translate(-50%, -50%);
         background: ${getNotificationColor(type)};
         color: white;
-        padding: 16px 24px;
-        border-radius: 12px;
-        font-size: 14px;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 13px;
         font-weight: 500;
         z-index: 1000;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-        max-width: 300px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        max-width: 250px;
         text-align: center;
         opacity: 0;
         transition: all 0.3s ease;
-        border: 2px solid rgba(255, 255, 255, 0.2);
     `;
 
   // Add to DOM
   document.body.appendChild(notification);
 
-  // Animate in with scale effect
+  // Animate in
   setTimeout(() => {
     notification.style.opacity = "1";
-    notification.style.transform = "translate(-50%, -50%) scale(1)";
+    notification.style.transform = "translate(-50%, -50%)";
   }, 100);
 
-  // Remove after 3 seconds
+  // Remove after 2 seconds (shorter duration)
   setTimeout(() => {
     notification.style.opacity = "0";
-    notification.style.transform = "translate(-50%, -50%) scale(0.95)";
     setTimeout(() => {
       if (notification.parentNode) {
         notification.parentNode.removeChild(notification);
       }
     }, 300);
-  }, 3000);
+  }, 2000);
 }
 
 function getNotificationColor(type) {
