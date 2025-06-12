@@ -1633,7 +1633,7 @@ button {
     justify-content: center;
     align-items: center;
     z-index: 2000;
-    padding: 5px;
+    padding: 0;
     box-sizing: border-box;
 }
 
@@ -1647,27 +1647,29 @@ button {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    padding: 10px 5px;
+    padding: 0;
     box-sizing: border-box;
 }
 
 .ar-video-container {
     position: relative;
-    width: 95%;
-    max-width: none;
-    height: 75vh;
-    border-radius: 8px;
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
     overflow: hidden;
     background: #000;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    margin: 0 auto;
+    box-shadow: none;
+    margin: 0;
 }
 
 .ar-background-video {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 8px;
+    object-position: center center;
+    border-radius: 0;
+    min-width: 100%;
+    min-height: 100%;
 }
 
 .ar-overlay {
@@ -2214,15 +2216,18 @@ button {
 
 /* Responsive Design for AR */
 @media (max-width: 480px) {
+    .ar-popup-overlay {
+        padding: 0;
+    }
+
     .ar-popup-content {
-        padding: 10px 5px;
+        padding: 0;
     }
 
     .ar-video-container {
-        width: 98%;
-        max-width: none;
-        height: 80vh;
-        margin: 5px auto;
+        width: 100%;
+        height: 100%;
+        margin: 0;
     }
 
     .ar-info-panel {
@@ -2265,19 +2270,18 @@ button {
 }
 
 @media (max-width: 393px) {
+    .ar-popup-overlay {
+        padding: 0;
+    }
+
     .ar-popup-content {
-        padding: 8px 3px;
+        padding: 0;
     }
 
     .ar-video-container {
-        width: 99%;
-        max-width: none;
-        height: 82vh;
-        margin: 3px auto;
-    }
-
-    .ar-popup-overlay {
-        padding: 2px;
+        width: 100%;
+        height: 100%;
+        margin: 0;
     }
 
     .ar-info-panel {
@@ -2342,15 +2346,18 @@ button {
 }
 
 @media (max-width: 350px) {
+    .ar-popup-overlay {
+        padding: 0;
+    }
+
     .ar-popup-content {
-        padding: 5px 2px;
+        padding: 0;
     }
 
     .ar-video-container {
-        width: 99%;
-        max-width: none;
-        height: 85vh;
-        margin: 2px auto;
+        width: 100%;
+        height: 100%;
+        margin: 0;
     }
 
     .ar-info-panel {
