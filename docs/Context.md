@@ -1,19 +1,20 @@
 # 源人步走 - App 流程與功能詳述
 
-> **概念原型 (Prototype Concept)**
+> **概念原型 (Prototype Concept) - v0.2**
 
 ## 📋 專案概述
 
 | 項目           | 詳情                                                 |
 | -------------- | ---------------------------------------------------- |
-| **版本**       | 0.1 (概念原型階段)                                   |
+| **版本**       | 0.2 (增強原型階段 - AR 模擬功能已實現)               |
 | **目標平台**   | Web (模擬手機 App 界面，純前端實現)                  |
 | **核心技術棧** | HTML, CSS, JavaScript                                |
 | **主要目標**   | 透過互動遊戲化方式，提升香港市民對綠色能源認知與實踐 |
+| **新增功能**   | AR 模擬系統、優化通知系統、垂直視頻支援              |
 
 ## 🎯 總體概述
 
-「源人步走」是一款旨在透過互動遊戲化方式，提升香港市民對綠色能源認知與實踐的教育應用概念。此原型將專注於核心前端交互，模擬主要遊戲流程，**不包含**真實後端、用戶登入、真實 AR 或硬件整合。
+「源人步走」是一款旨在透過互動遊戲化方式，提升香港市民對綠色能源認知與實踐的教育應用概念。此原型專注於核心前端交互，模擬主要遊戲流程，**已實現**完整 AR 體驗模擬、優化的通知系統，**不包含**真實後端、用戶登入、真實攝像頭 AR 或硬件整合。
 
 ## 🔄 核心用戶流程
 
@@ -25,11 +26,14 @@ graph TD
     D --> E[消耗對應能源元素，提升等級]
     B --> F[導航至探索視圖]
     F --> G[香港地圖及能源熱點]
-    G --> H[點擊熱點]
-    H --> I[AR+GPS互動模擬]
-    I --> J[收集特定能源元素獎勵]
-    B --> K[導航至資訊視圖]
-    K --> L[閱讀遊戲概念與教育內容]
+    G --> H[點擊熱點: 查看設施]
+    H --> I[AR資訊彈窗展示]
+    I --> J[🔍 開始AR掃描]
+    J --> K[AR模擬體驗]
+    K --> L[收集浮動能源球]
+    L --> M[完成收集，獲得獎勵]
+    B --> N[導航至資訊視圖]
+    N --> O[閱讀遊戲概念與教育內容]
 ```
 
 ### 詳細流程步驟
@@ -38,19 +42,123 @@ graph TD
 2. **🏠 家園視圖**
    - 查看當前環保評分及可用能源元素 (Solara☀️, Wind🌬️, Aqua💧, Bio-Fuel♻️, Kinetic⚡)
    - 點擊設施升級按鈕，消耗對應能源元素，提升設施等級及環保評分
+   - 靜默收集能源（無多餘通知）
 3. **🗺️ 探索視圖**
    - 查看模擬的香港地圖及能源熱點 (以九龍灣零碳天地為例)
-   - 結合 AR 擴增實境與 GPS 定位技術，探索香港各地的綠色能源設施
    - 地圖上顯示玩家角色隨機漫步
    - 地圖上標示「零碳天地」作為能源熱點
-   - 當玩家角色走到熱點附近時，可點擊熱點進行互動
-4. **📱 AR+GPS 熱點互動 (模擬)**
-   - 彈出該熱點的資訊框 (包含標題、描述、臨時方框、獎勵信息)
-   - 後續將加入影片片段以模擬 AR 效果
-   - 點擊「收集獎勵」按鈕，獲得特定類型的能源元素
-   - 能源元素數量更新，並反映在「家園」視圖的資源顯示中
+   - 點擊「查看設施」按鈕進入 AR 體驗
+4. **📱 AR 體驗流程 (全新實現)**
+   - **步驟 1**: 點擊「查看設施」→ 彈出設施資訊框（含 YouTube 教育視頻）
+   - **步驟 2**: 點擊「🔍 開始 AR 掃描」→ 進入全屏 AR 模擬界面
+   - **步驟 3**: AR 掃描序列（3 秒掃描 → 2 秒偵測 → 2 秒資訊載入）
+   - **步驟 4**: 顯示 3 個浮動太陽能球體，點擊收集能源
+   - **步驟 5**: 點擊「完成收集」返回地圖，能源自動加入背包
 5. **💡 資訊視圖**
    - 閱讀關於遊戲概念、玩法及教育意義的靜態文本
+
+---
+
+## 🌟 AR 模擬系統 (新增核心功能)
+
+### AR 體驗流程設計
+
+#### 第一階段：設施資訊展示
+
+- **觸發方式**: 點擊地圖上的「查看設施」按鈕
+- **展示內容**:
+  - 零碳天地基本資訊
+  - YouTube 嵌入式教育視頻（垂直視頻支援）
+  - 能源獎勵預覽：25 Solara☀️
+- **用戶操作**: 選擇「🔍 開始 AR 掃描」或關閉彈窗
+
+#### 第二階段：AR 掃描模擬
+
+```
+掃描序列時間軸：
+0-3秒   → 掃描網格動畫 + "掃描中..." 文字
+3-5秒   → 顯示偵測十字線 + "設施已偵測！"
+5-7秒   → 顯示資訊面板 + "分析完成！"
+7秒後   → 進入能源收集階段
+```
+
+#### 第三階段：互動能源收集
+
+- **3 個浮動能源球**: 分別含 5、8、12 Solara☀️
+- **點擊收集動畫**: 球體消失效果 + 數量更新
+- **進度追蹤**: 實時顯示已收集總量
+- **完成機制**: 收集完成後點擊「完成收集」按鈕
+
+### AR 界面元素
+
+| 元素           | 功能                 | 視覺效果               |
+| -------------- | -------------------- | ---------------------- |
+| **背景視頻**   | 零碳天地實景垂直視頻 | 全屏播放，自動循環     |
+| **掃描網格**   | 模擬 AR 掃描效果     | 漸變綠色網格，呼吸動畫 |
+| **偵測十字線** | 目標鎖定效果         | 脈衝動畫，中心定位     |
+| **資訊面板**   | 設施數據展示         | 半透明卡片，統計資料   |
+| **能源收集點** | 互動收集目標         | 3D 浮動效果，點擊反饋  |
+| **狀態指示器** | 當前操作提示         | 動態文字，進度顯示     |
+| **控制按鈕**   | 退出 AR、完成收集    | 固定定位，觸控友好     |
+
+### 技術實現特色
+
+#### 響應式 AR 界面
+
+- **桌面環境**: 模擬手機 AR 體驗，保持 393px 寬度
+- **移動設備**: 全屏沉浸式體驗
+- **垂直視頻**: 完美適配手機錄製的 9:16 比例視頻
+
+#### 動畫系統
+
+- **CSS 關鍵幀**: 流暢的掃描和浮動效果
+- **JavaScript 控制**: 精確的時序管理
+- **視覺反饋**: 即時的點擊和收集反應
+
+#### 狀態管理
+
+- **AR 會話追蹤**: 防止重複觸發
+- **能源計算**: 準確的獎勵統計
+- **重置機制**: 每次 AR 體驗後完整重置
+
+---
+
+## 🔔 優化通知系統
+
+### 通知簡化原則
+
+我們大幅簡化了通知系統，減少對用戶的干擾：
+
+#### 已移除的通知
+
+- ❌ **能源收集成功**: 取消"成功收集 X 能源"提示
+- ❌ **能源不足收集**: 取消"目前沒有可收集的能源"提示
+- ❌ **商店開啟**: 取消"商店已開啟"提示
+- ❌ **重複 AR 提示**: 合併多個 AR 相關通知
+
+#### 保留的必要通知
+
+- ✅ **設施升級成功**: "太陽能板已升級！"
+- ✅ **資源不足警告**: "Solara 能源元素不足！"
+- ✅ **AR 體驗狀態**: "設施資訊已載入"
+- ✅ **獎勵收集確認**: "獎勵已收集！您獲得了 X"
+
+#### 通知優化參數
+
+```css
+通知樣式優化：
+- 位置: 20% from top (不阻擋主要內容)
+- 尺寸: 較小padding (12px 20px)
+- 持續時間: 2秒 (降低至2秒)
+- 字體: 13px (更精簡)
+- 最大寬度: 250px (避免過寬)
+```
+
+### 事件監聽器優化
+
+- **防重複綁定**: 使用`data-event-attached`屬性標記
+- **單次綁定**: 確保每個按鈕只有一個事件監聽器
+- **清理機制**: 避免記憶體洩漏和重複觸發
 
 ---
 
@@ -855,15 +963,15 @@ document.querySelectorAll(".device-buy-btn.locked").forEach((button) => {
 });
 ```
 
-### 3.4 🗺️ 探索視圖 (`#view-explore`) - AR+GPS 模擬
+### 3.4 🗺️ 探索視圖 (`#view-explore`) - AR 模擬系統
 
 #### 顯示內容結構
 
 ```html
 <div id="view-explore" class="view">
-  <h2>香港綠蹤遊 (AR+GPS概念模擬)</h2>
+  <h2>香港綠蹤遊 (AR模擬體驗)</h2>
   <p class="guide-text">
-    結合擴增實境與定位技術，探索香港的綠色能源設施 - 零碳天地
+    透過AR模擬技術探索香港綠色能源設施 - 零碳天地教育體驗
   </p>
 
   <!-- 地圖模擬區域 - 單一熱點 -->
@@ -871,139 +979,307 @@ document.querySelectorAll(".device-buy-btn.locked").forEach((button) => {
     <div class="map-container">
       <h3>🗺️ 九龍灣區域地圖</h3>
       <div class="hotspot-location">
-        <button class="hotspot-btn main-hotspot" data-hotspot="zcb">
-          🏢 探索：零碳天地 (ZCB)
+        <button class="hotspot-interaction-btn" data-hotspot="zcb">
+          <i class="fas fa-video"></i> 查看設施
         </button>
         <p class="location-desc">香港首座零碳建築，展示多種綠色建築技術</p>
       </div>
     </div>
   </div>
 
-  <!-- AR資訊彈窗 -->
+  <!-- AR資訊彈窗 (第一階段) -->
   <div id="ar-popup-explore" style="display: none;">
     <h3 id="ar-popup-title-explore"></h3>
     <p id="ar-popup-desc-explore"></p>
-    <img
-      id="ar-popup-img-explore"
-      src=""
-      alt="熱點圖片"
-      style="display:none;"
-    />
+
+    <!-- YouTube教育視頻區域 -->
+    <div
+      class="video-container"
+      id="video-container-explore"
+      style="display: none;"
+    >
+      <!-- YouTube iframe 動態載入 -->
+    </div>
+
     <p>
       獎勵：<span id="ar-popup-reward-explore"></span>
       <span id="ar-popup-reward-type"></span>
     </p>
-    <button id="collect-reward-btn-explore">收集獎勵</button>
-    <button id="close-ar-popup-btn-explore">關閉</button>
+
+    <div class="popup-buttons">
+      <button id="ar-scan-btn-explore">🔍 開始AR掃描</button>
+      <button id="collect-reward-btn-explore" style="display: none;">
+        收集獎勵
+      </button>
+      <button id="close-ar-popup-btn-explore">關閉</button>
+    </div>
+  </div>
+
+  <!-- AR模擬體驗彈窗 (第二階段) -->
+  <div id="ar-simulation-popup" class="ar-popup-overlay" style="display: none;">
+    <div class="ar-popup-content">
+      <!-- 垂直視頻背景 -->
+      <div class="ar-video-container">
+        <video
+          id="ar-simulation-video"
+          autoplay
+          muted
+          loop
+          playsinline
+          class="ar-background-video"
+        >
+          <source src="assets/images/hotspot-video.mp4" type="video/mp4" />
+        </video>
+
+        <!-- AR覆蓋層元素 -->
+        <div class="ar-overlay">
+          <!-- 掃描網格 (0-3秒) -->
+          <div class="ar-scanning-grid" id="ar-scanning-grid">
+            <div class="grid-line grid-line-h"></div>
+            <div class="grid-line grid-line-v"></div>
+          </div>
+
+          <!-- 掃描文字 (0-7秒) -->
+          <div class="ar-scanning-text" id="ar-scanning-text">
+            <div class="scanning-dots">掃描中<span class="dots">...</span></div>
+            <div class="scanning-status">正在分析綠色能源設施</div>
+          </div>
+
+          <!-- 偵測十字線 (3-5秒) -->
+          <div class="ar-detection-target" id="ar-detection-target">
+            <div class="target-crosshair">
+              <div class="crosshair-line crosshair-h"></div>
+              <div class="crosshair-line crosshair-v"></div>
+            </div>
+            <div class="target-pulse"></div>
+          </div>
+
+          <!-- 資訊面板 (5-7秒) -->
+          <div class="ar-info-panel" id="ar-info-panel">
+            <div class="panel-header">
+              <h3>🏢 零碳天地</h3>
+              <div class="energy-type-indicator">
+                <span class="energy-icon">☀️</span>
+                <span class="energy-label">太陽能設施</span>
+              </div>
+            </div>
+            <div class="facility-stats">
+              <div class="stat-item">
+                <span class="stat-label">能源產出:</span>
+                <span class="stat-value">1200 kW/h</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">碳減排:</span>
+                <span class="stat-value">800 kg CO₂/日</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 能源收集點 (7秒後) -->
+          <div class="ar-energy-points" id="ar-energy-points">
+            <div class="energy-point energy-point-1" data-energy="5">
+              <div class="energy-orb">☀️</div>
+              <div class="energy-amount">+5</div>
+            </div>
+            <div class="energy-point energy-point-2" data-energy="8">
+              <div class="energy-orb">☀️</div>
+              <div class="energy-amount">+8</div>
+            </div>
+            <div class="energy-point energy-point-3" data-energy="12">
+              <div class="energy-orb">☀️</div>
+              <div class="energy-amount">+12</div>
+            </div>
+          </div>
+
+          <!-- 收集狀態顯示 -->
+          <div class="ar-collection-status" id="ar-collection-status">
+            <div class="collection-message">
+              <span class="collection-icon">✨</span>
+              <span class="collection-text">點擊太陽能球體收集能源！</span>
+            </div>
+            <div class="total-collected">
+              已收集: <span id="total-collected-amount">0</span> Solara☀️
+            </div>
+          </div>
+        </div>
+
+        <!-- AR控制按鈕 -->
+        <div class="ar-controls">
+          <button id="ar-exit-btn" class="ar-control-btn exit-btn">
+            <i class="fas fa-times"></i> 退出AR
+          </button>
+          <button
+            id="ar-complete-btn"
+            class="ar-control-btn complete-btn"
+            style="display: none;"
+          >
+            <i class="fas fa-check"></i> 完成收集
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <p class="info-text">
-    💡
-    提示：此為概念原型，僅展示單一AR熱點體驗。完整版本將包含更多香港綠色能源地點。
+    💡 提示：這是完整的AR模擬體驗，包含掃描、偵測、收集三個階段。
   </p>
 </div>
 ```
 
 #### JavaScript 邏輯實現
 
-##### 熱點數據結構
+##### 熱點數據結構 (已更新)
 
 ```javascript
 const hotspotDataExplore = {
-  // 零碳天地 - 唯一可用熱點
+  // 零碳天地 - 完整AR體驗
   zcb: {
     title: "零碳天地",
     desc: "香港首座零碳建築，展示多種綠色建築技術，包括太陽能板、風力發電和生物燃料系統。",
     img: "assets/images/hotspots/zcb_placeholder.jpg",
+    videoUrl: "https://youtu.be/X-UyN019CmU?si=DfEdBxGMyI6ZCbEO",
+    videoEmbedId: "X-UyN019CmU", // YouTube視頻ID用於嵌入
     reward: { type: "solara", amount: 25 },
     energyType: "solar",
   },
 };
 ```
 
-##### 事件監聽器
+##### 核心 AR 體驗函數
 
-**熱點按鈕點擊事件：**
+**AR 模擬啟動函數：**
 
 ```javascript
-document
-  .querySelector(".hotspot-btn")
-  .addEventListener("click", function (event) {
+function startARSimulation() {
+  // 隱藏資訊彈窗，顯示AR模擬界面
+  document.getElementById("ar-popup-explore").style.display = "none";
+  document.getElementById("ar-simulation-popup").style.display = "flex";
+
+  arSimulationActive = true;
+  arCollectedTotal = 0;
+
+  // 開始掃描序列
+  setTimeout(() => {
+    startScanningSequence();
+  }, 500);
+
+  // 設置AR事件監聽器
+  setupAREventListeners();
+  showNotification("AR掃描已啟動！", "info");
+}
+```
+
+**掃描序列控制函數：**
+
+```javascript
+function startScanningSequence() {
+  // 顯示掃描元素 (0-3秒)
+  document.getElementById("ar-scanning-grid").style.display = "block";
+  document.getElementById("ar-scanning-text").style.display = "block";
+
+  // 隱藏其他元素
+  document.getElementById("ar-detection-target").style.display = "none";
+  document.getElementById("ar-info-panel").style.display = "none";
+  document.getElementById("ar-energy-points").style.display = "none";
+
+  // 時序控制：掃描(3s) → 偵測(2s) → 資訊(2s) → 收集
+  setTimeout(() => {
+    document.getElementById("ar-detection-target").style.display = "block";
+    updateScanningText("設施已偵測！", "鎖定太陽能設施中...");
+  }, 3000);
+
+  setTimeout(() => {
+    document.getElementById("ar-info-panel").style.display = "block";
+    updateScanningText("分析完成！", "能源數據已載入");
+  }, 5000);
+
+  setTimeout(() => {
+    // 進入收集階段
+    document.getElementById("ar-scanning-grid").style.display = "none";
+    document.getElementById("ar-scanning-text").style.display = "none";
+    document.getElementById("ar-detection-target").style.display = "none";
+
+    document.getElementById("ar-energy-points").style.display = "block";
+    document.getElementById("ar-collection-status").style.display = "block";
+    document.getElementById("ar-complete-btn").style.display = "block";
+
+    showNotification("能源收集點已顯示！點擊收集Solara☀️", "success");
+  }, 7000);
+}
+```
+
+**能源收集函數：**
+
+```javascript
+function collectAREnergy(pointElement, amount) {
+  // 添加收集動畫
+  pointElement.classList.add("energy-collected");
+
+  // 更新總計
+  arCollectedTotal += amount;
+  document.getElementById("total-collected-amount").textContent =
+    arCollectedTotal;
+
+  // 移除能源點
+  setTimeout(() => {
+    pointElement.style.display = "none";
+  }, 800);
+
+  // 檢查是否全部收集完成
+  const remainingPoints = document.querySelectorAll(
+    ".energy-point:not(.energy-collected)"
+  );
+  if (remainingPoints.length === 1) {
+    setTimeout(() => {
+      updateCollectionStatus("所有能源已收集！", "點擊完成按鈕返回地圖");
+    }, 1000);
+  }
+
+  showNotification(`收集了 ${amount} Solara☀️！`, "success");
+}
+```
+
+##### 事件監聽器優化
+
+**防止重複綁定的熱點按鈕：**
+
+```javascript
+// 檢查是否已綁定事件監聽器，防止重複綁定
+if (!hotspotBtn.hasAttribute("data-event-attached")) {
+  hotspotBtn.addEventListener("click", function (event) {
     const hotspotId = event.target.dataset.hotspot;
     const data = hotspotDataExplore[hotspotId];
 
-    // 更新彈窗內容
-    document.getElementById("ar-popup-title-explore").textContent = data.title;
-    document.getElementById("ar-popup-desc-explore").textContent = data.desc;
-    document.getElementById("ar-popup-reward-explore").textContent =
-      data.reward.amount;
-    document.getElementById("ar-popup-reward-type").textContent =
-      getEnergyElementDisplay(data.reward.type);
+    if (data) {
+      // 更新彈窗內容
+      document.getElementById("ar-popup-title-explore").textContent =
+        data.title;
+      document.getElementById("ar-popup-desc-explore").textContent = data.desc;
 
-    // 設置圖片
-    const img = document.getElementById("ar-popup-img-explore");
-    img.src = data.img;
-    img.style.display = "block";
+      // 載入YouTube視頻 (如果可用)
+      if (data.videoEmbedId) {
+        const videoContainer = document.getElementById(
+          "video-container-explore"
+        );
+        const iframe = document.createElement("iframe");
+        iframe.src = `https://www.youtube.com/embed/${data.videoEmbedId}`;
+        iframe.width = "100%";
+        iframe.height = "200";
+        videoContainer.appendChild(iframe);
+        videoContainer.style.display = "block";
+      }
 
-    // 存儲當前獎勵信息
-    currentReward = data.reward;
+      // 存儲當前獎勵並顯示彈窗
+      currentReward = data.reward;
+      document.getElementById("ar-popup-explore").style.display = "block";
 
-    // 顯示彈窗
-    document.getElementById("ar-popup-explore").style.display = "block";
-  });
-```
-
-**獎勵收集事件：**
-
-```javascript
-document
-  .getElementById("collect-reward-btn-explore")
-  .addEventListener("click", function () {
-    // 根據獎勵類型增加對應的能源元素
-    switch (currentReward.type) {
-      case "solara":
-        energyElements.solara += currentReward.amount;
-        break;
-      case "wind":
-        energyElements.wind += currentReward.amount;
-        break;
-      case "aqua":
-        energyElements.aqua += currentReward.amount;
-        break;
-      case "biofuel":
-        energyElements.biofuel += currentReward.amount;
-        break;
-      case "kinetic":
-        energyElements.kinetic += currentReward.amount;
-        break;
+      // 簡化通知：只顯示一條載入完成訊息
+      showNotification("設施資訊已載入", "success");
     }
-
-    updateHomeDisplay();
-    document.getElementById("ar-popup-explore").style.display = "none";
-    alert(
-      `獎勵已收集！您獲得了 ${currentReward.amount} ${getEnergyElementDisplay(
-        currentReward.type
-      )}`
-    );
   });
 
-// 關閉彈窗事件
-document
-  .getElementById("close-ar-popup-btn-explore")
-  .addEventListener("click", function () {
-    document.getElementById("ar-popup-explore").style.display = "none";
-  });
-
-// 輔助函數：獲取能源元素顯示名稱
-function getEnergyElementDisplay(type) {
-  const displayNames = {
-    solara: "Solara☀️",
-    wind: "Wind🌬️",
-    aqua: "Aqua💧",
-    biofuel: "Bio-Fuel♻️",
-    kinetic: "Kinetic⚡",
-  };
-  return displayNames[type] || type;
+  // 標記已綁定
+  hotspotBtn.setAttribute("data-event-attached", "true");
 }
 ```
 
