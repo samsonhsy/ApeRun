@@ -1109,16 +1109,25 @@ button {
 
 /* Explore Header Layout */
 .explore-header {
+    position: relative;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: center;
     margin-bottom: 10px;
     padding: 0 4px;
 }
 
 .explore-header h2 {
-    margin: 16px 0;
     flex: 1;
+    text-align: center;
+    margin: 16px 0;
+}
+
+#open-device-store-btn {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 /* Compact Store Button */
@@ -2418,6 +2427,13 @@ button {
         padding: 4px 6px;
         font-size: 8px;
     }
+}
+
+.ar-reward-notice {
+    font-size: 13px;
+    color: #388E3C;
+    margin-bottom: 8px;
+    text-align: center;
 }
 
 /* End of CSS file */
