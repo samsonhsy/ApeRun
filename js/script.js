@@ -41,7 +41,7 @@ let currentReward = null;
 const hotspotDataExplore = {
   zcb: {
     title: "零碳天地",
-    desc: "香港首座零碳建築，展示多種綠色建築技術，包括太陽能板、風力發電和生物燃料系統。",
+    desc: "香港首座零碳建築，展示多種綠色建築技術，包括太陽能板和生物燃料系統。",
     img: "assets/images/hotspots/zcb_placeholder.jpg",
     videoUrl: "https://youtu.be/X-UyN019CmU?si=DfEdBxGMyI6ZCbEO",
     videoEmbedId: "X-UyN019CmU",

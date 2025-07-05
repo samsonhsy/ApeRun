@@ -795,9 +795,11 @@ button {
         padding: 5px;
     }
 
-    .device-store-content {
-        width: 92%;
-        max-height: 90vh;
+    .device-store-content,
+    .facility-store-content {
+        width: 95%;
+        max-height: 85vh;
+        border-radius: 12px;
     }
 
     .popup-header {
@@ -810,14 +812,16 @@ button {
 
     .popup-body {
         padding: 12px;
-        max-height: 75vh;
+        max-height: 70vh;
     }
 
-    .device-item {
+    .device-item,
+    .facility-item {
         padding: 10px;
     }
 
-    .device-description {
+    .device-description,
+    .facility-description {
         font-size: 12px;
     }
 
@@ -1417,7 +1421,9 @@ button {
 
 /* Responsive Design for Device Store */
 @media (max-width: 480px) {
-    .device-store-content {
+
+    .device-store-content,
+    .facility-store-content {
         width: 95%;
         margin: 10px;
     }
@@ -1426,17 +1432,20 @@ button {
         padding: 15px;
     }
 
-    .device-item {
+    .device-item,
+    .facility-item {
         padding: 12px;
     }
 
-    .device-header {
+    .device-header,
+    .facility-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 5px;
     }
 
-    .device-price {
+    .device-price,
+    .facility-price {
         align-self: flex-end;
     }
 
@@ -1451,9 +1460,11 @@ button {
         padding: 5px;
     }
 
-    .device-store-content {
-        width: 92%;
-        max-height: 90vh;
+    .device-store-content,
+    .facility-store-content {
+        width: 95%;
+        max-height: 85vh;
+        border-radius: 12px;
     }
 
     .popup-header {
@@ -1466,14 +1477,16 @@ button {
 
     .popup-body {
         padding: 12px;
-        max-height: 75vh;
+        max-height: 70vh;
     }
 
-    .device-item {
+    .device-item,
+    .facility-item {
         padding: 10px;
     }
 
-    .device-description {
+    .device-description,
+    .facility-description {
         font-size: 12px;
     }
 

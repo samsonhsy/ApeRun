@@ -1709,3 +1709,337 @@ function switchView(targetViewId) {
 ---
 
 _此文檔為「源人步走」概念原型的完整技術規格，包含所有必要的實現細節和開發指導。_
+
+---
+
+## 📱 iPhone 14 Pro Mockup Integration
+
+### 🎯 Mockup Integration Overview
+
+The project includes iPhone 14 Pro mockup assets to create a more realistic mobile app presentation. The mockup consists of two key components:
+
+| Component          | File                                                 | Purpose                                           |
+| ------------------ | ---------------------------------------------------- | ------------------------------------------------- |
+| **iPhone Frame**   | `assets/images/iphone14proMockup/iphoneFrame.png`    | Main device frame with rounded corners and bezels |
+| **Dynamic Island** | `assets/images/iphone14proMockup/Notch + Camera.png` | Dynamic Island and camera module overlay          |
+
+### 🏗️ Mockup Integration Architecture
+
+#### HTML Structure Enhancement
+
+```html
+<!-- Mockup Container Structure -->
+<div class="mockup-container">
+  <!-- iPhone Frame Background -->
+  <div class="iphone-frame">
+    <img
+      src="assets/images/iphone14proMockup/iphoneFrame.png"
+      alt="iPhone 14 Pro Frame"
+      class="frame-image"
+    />
+
+    <!-- Dynamic Island Overlay -->
+    <div class="dynamic-island-container">
+      <img
+        src="assets/images/iphone14proMockup/Notch + Camera.png"
+        alt="Dynamic Island"
+        class="dynamic-island"
+      />
+    </div>
+
+    <!-- App Content Container -->
+    <div class="app-content-wrapper">
+      <!-- Existing App Container -->
+      <div id="app-container">
+        <!-- All existing app content goes here -->
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+#### CSS Implementation Specifications
+
+```css
+/* Mockup Container Styles */
+.mockup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+}
+
+/* iPhone Frame Styles */
+.iphone-frame {
+  position: relative;
+  width: 393px;
+  height: 852px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.frame-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Dynamic Island Positioning */
+.dynamic-island-container {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.dynamic-island {
+  width: 126px;
+  height: 37px;
+  object-fit: contain;
+}
+
+/* App Content Wrapper */
+.app-content-wrapper {
+  position: relative;
+  width: 393px;
+  height: 852px;
+  z-index: 2;
+  overflow: hidden;
+  border-radius: 48px;
+  background: white;
+}
+
+/* Adjust existing app-container styles */
+#app-container {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  min-height: none;
+  border-radius: 0;
+  box-shadow: none;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Responsive Design for Mockup */
+@media (max-width: 480px) {
+  .mockup-container {
+    padding: 10px;
+  }
+
+  .iphone-frame {
+    width: 100%;
+    max-width: 393px;
+    height: auto;
+    aspect-ratio: 393/852;
+  }
+
+  .app-content-wrapper {
+    width: 100%;
+    height: 100%;
+  }
+
+  .dynamic-island {
+    width: 32vw;
+    max-width: 126px;
+    height: auto;
+  }
+}
+```
+
+### 🔧 Implementation Strategy
+
+#### Phase 1: Basic Mockup Integration
+
+1. **Wrap Existing App**: Enclose current `#app-container` within mockup structure
+2. **Frame Positioning**: Position iPhone frame as background layer
+3. **Dynamic Island**: Overlay dynamic island at top center
+4. **Content Adjustment**: Ensure app content fits within frame boundaries
+
+#### Phase 2: Enhanced Visual Integration
+
+1. **Shadow Effects**: Add realistic shadows to frame
+2. **Reflection Effects**: Optional glass-like reflections
+3. **Background Gradients**: Enhance mockup background
+4. **Responsive Scaling**: Ensure mockup scales properly on different screens
+
+#### Phase 3: Interactive Elements
+
+1. **Dynamic Island States**: Simulate different dynamic island states
+2. **Frame Interactions**: Optional frame highlight effects
+3. **Orientation Support**: Handle landscape/portrait transitions
+
+### 📐 Technical Specifications
+
+#### Frame Dimensions
+
+| Property                  | Value   | Notes                       |
+| ------------------------- | ------- | --------------------------- |
+| **Frame Width**           | 393px   | iPhone 14 Pro actual width  |
+| **Frame Height**          | 852px   | iPhone 14 Pro actual height |
+| **Aspect Ratio**          | 393:852 | Approximately 9:19.5        |
+| **Border Radius**         | 48px    | Frame corner radius         |
+| **Dynamic Island Width**  | 126px   | Dynamic island width        |
+| **Dynamic Island Height** | 37px    | Dynamic island height       |
+
+#### Content Safe Areas
+
+```css
+/* Safe area calculations */
+.content-safe-area {
+  padding-top: 60px; /* Dynamic island + status bar */
+  padding-bottom: 34px; /* Home indicator area */
+  padding-left: 20px; /* Side bezel compensation */
+  padding-right: 20px; /* Side bezel compensation */
+}
+```
+
+### 🎨 Visual Enhancement Options
+
+#### Background Variations
+
+```css
+/* Option 1: Gradient Background */
+.mockup-container {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Option 2: Solid Color */
+.mockup-container {
+  background: #1a1a1a;
+}
+
+/* Option 3: Pattern Background */
+.mockup-container {
+  background: radial-gradient(
+      circle at 20% 80%,
+      rgba(120, 119, 198, 0.3) 0%,
+      transparent 50%
+    ), radial-gradient(
+      circle at 80% 20%,
+      rgba(255, 119, 198, 0.3) 0%,
+      transparent 50%
+    ), linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+```
+
+#### Frame Effects
+
+```css
+/* Subtle shadow effect */
+.iphone-frame {
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3));
+}
+
+/* Glass reflection effect */
+.iphone-frame::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 50%
+  );
+  border-radius: 48px;
+  z-index: 3;
+  pointer-events: none;
+}
+```
+
+### 📁 File Organization Update
+
+#### Updated Project Structure
+
+```
+ApeRun-Prototype/
+├── 📄 index.html                 # Updated with mockup wrapper
+├── 📄 README.md                  # Updated documentation
+├── 📄 .gitignore                 # Git ignore configuration
+│
+├── 📂 css/                       # Style files
+│   ├── 📄 style.css              # Updated with mockup styles
+│   ├── 📄 mockup.css             # Dedicated mockup styles (optional)
+│   └── 📄 responsive.css         # Responsive design updates
+│
+├── 📂 js/                        # JavaScript files
+│   ├── 📄 script.js              # Main logic (unchanged)
+│   └── 📄 mockup.js              # Mockup interaction logic (optional)
+│
+├── 📂 assets/                    # Static assets
+│   └── 📂 images/
+│       ├── 📂 iphone14proMockup/ # Mockup assets
+│       │   ├── 🖼️ iphoneFrame.png
+│       │   └── 🖼️ Notch + Camera.png
+│       ├── 📂 hotspots/          # AR hotspot images
+│       ├── 📂 icons/             # App icons
+│       └── 📂 backgrounds/       # Background images
+│
+└── 📂 docs/                      # Documentation
+    ├── 📄 Context.md             # Updated with mockup specs
+    └── 📄 Mockup-Guide.md        # Detailed mockup implementation guide
+```
+
+### 🔄 Migration Strategy
+
+#### Step 1: HTML Structure Update
+
+1. **Wrap Existing Content**: Enclose current app container in mockup structure
+2. **Preserve Functionality**: Ensure all existing IDs and classes remain intact
+3. **Add Mockup Elements**: Insert frame and dynamic island images
+
+#### Step 2: CSS Integration
+
+1. **Add Mockup Styles**: Implement frame positioning and styling
+2. **Adjust App Container**: Modify existing app container styles for mockup fit
+3. **Responsive Updates**: Ensure mockup scales properly on different devices
+
+#### Step 3: Testing and Refinement
+
+1. **Visual Verification**: Check frame alignment and proportions
+2. **Functionality Testing**: Ensure all app features work within mockup
+3. **Cross-browser Testing**: Verify compatibility across different browsers
+
+### ⚠️ Implementation Considerations
+
+#### Performance Impact
+
+- **Image Optimization**: Ensure mockup images are optimized for web
+- **Lazy Loading**: Consider lazy loading for mockup assets
+- **CSS Efficiency**: Use efficient CSS selectors and properties
+
+#### Accessibility
+
+- **Alt Text**: Provide meaningful alt text for mockup images
+- **Focus Management**: Ensure keyboard navigation works within mockup
+- **Screen Reader**: Test with screen readers for accessibility
+
+#### Browser Compatibility
+
+- **CSS Support**: Ensure all CSS properties are widely supported
+- **Fallback Styles**: Provide fallback styles for older browsers
+- **Mobile Testing**: Test on actual mobile devices
+
+### 🎯 Mockup Integration Benefits
+
+1. **Professional Presentation**: More realistic app demonstration
+2. **Context Awareness**: Users understand the mobile context
+3. **Visual Appeal**: Enhanced visual presentation for demos
+4. **Brand Consistency**: Maintains Apple design language
+5. **User Experience**: Better understanding of actual app usage
+
+---
+
+_此文檔為「源人步走」概念原型的完整技術規格，包含所有必要的實現細節和開發指導。_
