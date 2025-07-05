@@ -707,7 +707,7 @@ function updateHomeDisplay() {
       solarCollectBtn.style.opacity = "1";
       solarCollectBtn.style.background =
         "linear-gradient(135deg, #FF8A00, #FF9800)";
-      solarCollectBtn.textContent = `收集能源 (${availableFacilities.solar.accumulated} 可收集) ⚡`;
+      solarCollectBtn.textContent = `收集能源 (${availableFacilities.solar.accumulated} 可收集) 🫴`;
     } else {
       solarCollectBtn.disabled = true;
       solarCollectBtn.style.opacity = "0.6";
